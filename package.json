@@ -1,0 +1,13 @@
+{
+  "name": "pos-electron",
+  "version": "1.0.0",
+  "description": "Electron POS System",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^30.0.0",
+    "mysql2": "^3.9.0"
+  }
+}
