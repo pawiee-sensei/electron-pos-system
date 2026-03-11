@@ -1,6 +1,11 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");   // ← ADD THIS
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 const products = require("./modules/products");
+
+ipcMain.handle("get-products", async () => {
+  const data = await products.getAllProducts();
+  return data;
+});
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -17,18 +22,17 @@ function createWindow() {
   win.loadFile("renderer/index.html");
 }
 
-
-  app.whenReady().then(async () => {
+app.whenReady().then(async () => {
 
   const data = await products.getAllProducts();
   console.log("Products from DB:", data);
 
   createWindow();
 
-
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
 });
 
 app.on("window-all-closed", function () {

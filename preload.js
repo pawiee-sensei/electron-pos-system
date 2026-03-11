@@ -1,3 +1,7 @@
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("POS Loaded");
+const { contextBridge, ipcRenderer } = require("electron");
+
+contextBridge.exposeInMainWorld("api", {
+
+  getProducts: () => ipcRenderer.invoke("get-products")
+
 });
