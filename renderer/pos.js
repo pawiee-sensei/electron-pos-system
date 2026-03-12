@@ -1,4 +1,5 @@
 let cart = [];
+window.cart = cart;
 
 async function loadProducts() {
 
@@ -11,7 +12,12 @@ async function loadProducts() {
     products.forEach(product => {
 
         const card = document.createElement("div");
-        card.className = "product-card";
+
+            card.className = "product-card";
+
+            if(product.current_stock <= 0){
+                card.classList.add("out-of-stock");
+            }
         card.dataset.category = product.category || "General";
 
         card.onclick = () => {
@@ -29,6 +35,10 @@ async function loadProducts() {
 
             <div class="product-price">
                 ₱${product.selling_price}
+            </div>
+
+            <div class="product-stock">
+                Stock: ${product.current_stock}
             </div>
         `;
 
@@ -235,6 +245,14 @@ function showView(view){
         .getElementById("view-" + view)
         .classList.remove("hidden");
 
+    const checkoutBtn = document.getElementById("checkoutBtn");
+
+    if(view === "checkout"){
+        checkoutBtn.style.display = "none";
+    }else{
+        checkoutBtn.style.display = "block";
+    }
+
 }
 
 function filterCategory(category){
@@ -252,3 +270,4 @@ function filterCategory(category){
     });
 
 }
+

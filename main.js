@@ -1,6 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const products = require("./modules/products");
+const checkout = require("./modules/checkout");
+
+ipcMain.handle("process-sale", async (event,data)=>{
+
+    return await checkout.processSale(
+        data.cart,
+        data.total,
+        data.payment
+    );
+
+});
 
 ipcMain.handle("get-products", async () => {
   const data = await products.getAllProducts();
@@ -38,3 +49,4 @@ app.whenReady().then(async () => {
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
+

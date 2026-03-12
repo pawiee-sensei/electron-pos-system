@@ -11,93 +11,109 @@
 <div class="app-layout">
 
     <!-- SIDEBAR -->
-
     <div class="sidebar">
 
         <div class="logo">POS electron</div>
 
         <button onclick="showView('pos')">POS</button>
-
-        <button onclick="showView('checkout')">
-            Checkout
-        </button>
+        <button onclick="showView('checkout')">Checkout</button>
 
     </div>
 
     <!-- MAIN CONTENT -->
-
     <div class="main-content">
 
         <!-- POS VIEW -->
-
         <div id="view-pos" class="view">
 
             <div class="pos-header">
-
-                <input 
-                    id="searchInput"
-                    placeholder="Search product..."
-                >
-
+                <input id="searchInput" placeholder="Search product...">
             </div>
 
-            <div class="category-tabs" id="categoryTabs">
-                <!-- categories will render here -->
-            </div>
+            <div class="category-tabs" id="categoryTabs"></div>
 
             <div id="productGrid" class="product-grid"></div>
 
         </div>
 
         <!-- CHECKOUT VIEW -->
-
         <div id="view-checkout" class="view hidden">
 
-            <h2>Payment Methods</h2>
+            <h2>Payment Method</h2>
 
             <div class="payment-options">
 
-                <button>Cash</button>
-                <button>Card</button>
-                <button>Split</button>
+                <div id="pay-cash" class="payment-option" onclick="selectPayment('cash')">
+                    <div class="payment-icon">💵</div>
+                    <div class="payment-label">Cash</div>
+                </div>
 
+                <div id="pay-card" class="payment-option" onclick="selectPayment('card')">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-label">Card</div>
+                </div>
+
+                <div id="pay-gcash" class="payment-option" onclick="selectPayment('gcash')">
+                    <div class="payment-icon">📱</div>
+                    <div class="payment-label">GCash</div>
+                </div>
+
+            </div>
+
+            <div id="cashSection" style="display:none">
+
+                <input
+                    id="cashInput"
+                    placeholder="Enter cash"
+                    oninput="calculateChange()"
+                />
+
+                <div id="changeDisplay">
+                    Change: ₱0
+                </div>
+
+            </div>
+
+            <button onclick="processCheckout()">
+                Complete Sale
+            </button>
+
+        </div>
+
+    </div> <!-- END main-content -->
+
+
+    <!-- CART PANEL -->
+    <div class="cart-panel">
+
+        <h3>Current Order</h3>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-summary">
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="subtotalAmount">₱0</span>
             </div>
 
         </div>
 
-    </div>
-
-    <!-- CART PANEL -->
-
-<div class="cart-panel">
-
-    <h3>Current Order</h3>
-
-    <div id="cartItems"></div>
-
-    <div class="cart-summary">
-
-        <div class="summary-row">
-            <span>Subtotal</span>
-            <span id="subtotalAmount">₱0</span>
+        <div class="total-row">
+            <span>Total</span>
+            <span class="total-amount" id="totalAmount">₱0</span>
         </div>
 
+        <button class="checkout-btn" id="checkoutBtn">
+            Checkout
+        </button>
+
     </div>
 
-    <div class="total-row">
-        <span>Total</span>
-        <span class="total-amount" id="totalAmount">₱0</span>
-    </div>
-
-    <button class="checkout-btn" id="checkoutBtn">
-        Checkout
-    </button>
-
-</div>
-
-</div>
+</div> <!-- END app-layout -->
 
 <script src="pos.js"></script>
+<script src="checkout.js"></script>
 
 </body>
 </html>
