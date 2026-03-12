@@ -8,16 +8,70 @@
 
 <body>
 
-<div class="pos-layout">
+<div class="app-layout">
 
-    <div class="product-section">
-        <h2>Products</h2>
-        <div id="productGrid" class="product-grid"></div>
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">POS electron</div>
+
+        <button onclick="showView('pos')">POS</button>
+
+        <button onclick="showView('checkout')">
+            Checkout
+        </button>
+
     </div>
 
-    <div class="cart-section">
+    <!-- MAIN CONTENT -->
 
-        <h2>Cart</h2>
+    <div class="main-content">
+
+        <!-- POS VIEW -->
+
+        <div id="view-pos" class="view">
+
+            <div class="pos-header">
+
+                <input 
+                    id="searchInput"
+                    placeholder="Search product..."
+                >
+
+            </div>
+
+            <div class="category-tabs" id="categoryTabs">
+                <!-- categories will render here -->
+            </div>
+
+            <div id="productGrid" class="product-grid"></div>
+
+        </div>
+
+        <!-- CHECKOUT VIEW -->
+
+        <div id="view-checkout" class="view hidden">
+
+            <h2>Payment Methods</h2>
+
+            <div class="payment-options">
+
+                <button>Cash</button>
+                <button>Card</button>
+                <button>Split</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CART PANEL -->
+
+    <div class="cart-panel">
+
+        <h2>Current Order</h2>
 
         <div id="cartItems"></div>
 
@@ -26,7 +80,7 @@
         </div>
 
         <button id="checkoutBtn">
-            Checkout
+            Continue
         </button>
 
     </div>

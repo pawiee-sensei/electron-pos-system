@@ -12,25 +12,85 @@ async function loadProducts() {
 
         const card = document.createElement("div");
         card.className = "product-card";
+        card.dataset.category = product.category || "General";
 
         card.onclick = () => {
             addToCart(product);
         };
 
         card.innerHTML = `
-            <h3>${product.name}</h3>
-            <p>₱${product.selling_price}</p>
-            <small>Stock: ${product.current_stock}</small>
+            <div class="product-image">
+                <img src="${product.image || 'https://via.placeholder.com/100'}">
+            </div>
+
+            <div class="product-name">
+                ${product.name}
+            </div>
+
+            <div class="product-price">
+                ₱${product.selling_price}
+            </div>
         `;
 
         grid.appendChild(card);
 
     });
 
+    const categories = ["All", ...new Set(products.map(p => p.category || "General"))];
+
+const tabs = document.getElementById("categoryTabs");
+
+tabs.innerHTML = "";
+
+categories.forEach(cat => {
+
+    const tab = document.createElement("div");
+
+    tab.className = "category-tab";
+
+    tab.innerText = cat;
+
+    tab.onclick = () => filterCategory(cat);
+
+    tabs.appendChild(tab);
+
+});
+
+
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
     loadProducts();
+
+    document
+        .getElementById("checkoutBtn")
+        .addEventListener("click", () => {
+
+            showView("checkout");
+
+        });
+    document
+        .getElementById("searchInput")
+        .addEventListener("input", e => {
+
+});
+
+
+    const value = e.target.value.toLowerCase();
+
+    document
+    .querySelectorAll(".product-card")
+    .forEach(card => {
+
+        const name = card.innerText.toLowerCase();
+
+        card.style.display =
+            name.includes(value) ? "block" : "none";
+
+    });
+
 });
 
 function addToCart(product){
@@ -66,6 +126,8 @@ function addToCart(product){
     renderCart();
 }
 
+
+// 
 function renderCart(){
 
     const cartItems = document.getElementById("cartItems");
@@ -75,9 +137,24 @@ function renderCart(){
     cart.forEach(item => {
 
         const row = document.createElement("div");
+        row.className = "cart-item";
 
         row.innerHTML = `
-            ${item.name} x${item.qty} - ₱${item.price * item.qty}
+            <div>
+                ${item.name}
+                <br>
+                ₱${item.price * item.qty}
+            </div>
+
+            <div class="qty-controls">
+
+                <button class="qty-btn" onclick="decreaseQty(${item.id})">-</button>
+
+                <span>${item.qty}</span>
+
+                <button class="qty-btn" onclick="increaseQty(${item.id})">+</button>
+
+            </div>
         `;
 
         cartItems.appendChild(row);
@@ -85,6 +162,31 @@ function renderCart(){
     });
 
     updateTotal();
+
+}
+
+function increaseQty(id){
+
+    const item = cart.find(i => i.id === id);
+
+    if(item.qty < item.stock){
+        item.qty++;
+    }
+
+    renderCart();
+}
+
+function decreaseQty(id){
+
+    const index = cart.findIndex(i => i.id === id);
+
+    if(cart[index].qty > 1){
+        cart[index].qty--;
+    }else{
+        cart.splice(index,1);
+    }
+
+    renderCart();
 }
 
 function updateTotal(){
@@ -95,5 +197,37 @@ function updateTotal(){
 
     document.querySelector(".cart-total").innerText =
         "TOTAL ₱" + total;
+
+}
+
+function showView(view){
+
+    document
+        .getElementById("view-pos")
+        .classList.add("hidden");
+
+    document
+        .getElementById("view-checkout")
+        .classList.add("hidden");
+
+    document
+        .getElementById("view-" + view)
+        .classList.remove("hidden");
+
+}
+
+function filterCategory(category){
+
+    document
+    .querySelectorAll(".product-card")
+    .forEach(card => {
+
+        if(category === "All" || card.dataset.category === category){
+            card.style.display = "block";
+        }else{
+            card.style.display = "none";
+        }
+
+    });
 
 }
