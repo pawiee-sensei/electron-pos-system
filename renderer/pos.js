@@ -20,7 +20,7 @@ async function loadProducts() {
 
         card.innerHTML = `
             <div class="product-image">
-                <img src="${product.image || 'https://via.placeholder.com/100'}">
+                <img src="file:///C:/Users/Paolo/OneDrive/Documents/inventory/uploads/${product.image || 'placeholder.png'}">
             </div>
 
             <div class="product-name">
@@ -64,18 +64,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadProducts();
 
-    document
+document
         .getElementById("checkoutBtn")
         .addEventListener("click", () => {
 
             showView("checkout");
 
         });
-    document
-        .getElementById("searchInput")
-        .addEventListener("input", e => {
+document
+    .getElementById("searchInput")
+    .addEventListener("input", e => {
 
-});
+        const value = e.target.value.toLowerCase();
+
+    document
+        .querySelectorAll(".product-card")
+        .forEach(card => {
+
+            const name = card.innerText.toLowerCase();
+
+            card.style.display =
+                name.includes(value) ? "block" : "none";
+
+        });
+
+    });
 
 
     const value = e.target.value.toLowerCase();
@@ -118,6 +131,7 @@ function addToCart(product){
             name: product.name,
             price: product.selling_price,
             stock: product.current_stock,
+            image: product.image,
             qty: 1
         });
 
@@ -131,7 +145,6 @@ function addToCart(product){
 function renderCart(){
 
     const cartItems = document.getElementById("cartItems");
-
     cartItems.innerHTML = "";
 
     cart.forEach(item => {
@@ -140,21 +153,28 @@ function renderCart(){
         row.className = "cart-item";
 
         row.innerHTML = `
-            <div>
-                ${item.name}
-                <br>
-                ₱${item.price * item.qty}
+        <div class="cart-item-left">
+
+            <div class="cart-item-img">
+                <img src="file:///C:/Users/Paolo/OneDrive/Documents/inventory/uploads/${item.image}">
             </div>
 
-            <div class="qty-controls">
-
-                <button class="qty-btn" onclick="decreaseQty(${item.id})">-</button>
-
-                <span>${item.qty}</span>
-
-                <button class="qty-btn" onclick="increaseQty(${item.id})">+</button>
-
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">₱${item.price}</div>
             </div>
+
+        </div>
+
+        <div class="qty-controls">
+
+            <button class="qty-btn" onclick="decreaseQty(${item.id})">−</button>
+
+            <span>${item.qty}</span>
+
+            <button class="qty-btn" onclick="increaseQty(${item.id})">+</button>
+
+        </div>
         `;
 
         cartItems.appendChild(row);
@@ -162,7 +182,6 @@ function renderCart(){
     });
 
     updateTotal();
-
 }
 
 function increaseQty(id){
@@ -195,9 +214,11 @@ function updateTotal(){
         return sum + item.price * item.qty;
     },0);
 
-    document.querySelector(".cart-total").innerText =
-        "TOTAL ₱" + total;
+    document.getElementById("subtotalAmount").innerText =
+        "₱" + total;
 
+    document.getElementById("totalAmount").innerText =
+        "₱" + total;
 }
 
 function showView(view){

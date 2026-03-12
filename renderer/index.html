@@ -69,21 +69,31 @@
 
     <!-- CART PANEL -->
 
-    <div class="cart-panel">
+<div class="cart-panel">
 
-        <h2>Current Order</h2>
+    <h3>Current Order</h3>
 
-        <div id="cartItems"></div>
+    <div id="cartItems"></div>
 
-        <div class="cart-total">
-            TOTAL ₱0
+    <div class="cart-summary">
+
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="subtotalAmount">₱0</span>
         </div>
 
-        <button id="checkoutBtn">
-            Continue
-        </button>
-
     </div>
+
+    <div class="total-row">
+        <span>Total</span>
+        <span class="total-amount" id="totalAmount">₱0</span>
+    </div>
+
+    <button class="checkout-btn" id="checkoutBtn">
+        Checkout
+    </button>
+
+</div>
 
 </div>
 
