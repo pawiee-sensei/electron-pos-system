@@ -71,7 +71,14 @@ function filterCategory(category){
 
 function showView(view){
 
-    
+    if(view === "checkout"){
+
+    const total = window.getCartTotal();
+
+    document.getElementById("checkoutTotal").innerText =
+        "₱" + total;
+
+}
 
     document.getElementById("view-pos").classList.add("hidden");
     document.getElementById("view-checkout").classList.add("hidden");

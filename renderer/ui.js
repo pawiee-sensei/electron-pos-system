@@ -48,5 +48,13 @@ window.updateTotal = function(){
 
     document.getElementById("subtotalAmount").innerText = "₱" + total;
     document.getElementById("totalAmount").innerText = "₱" + total;
+
+    // Update checkout amount due live
+    const checkoutTotal = document.getElementById("checkoutTotal");
+
+    if(checkoutTotal){
+        checkoutTotal.innerText = "₱" + total;
+    }
+
 }
 

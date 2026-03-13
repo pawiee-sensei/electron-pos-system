@@ -40,7 +40,13 @@ window.increaseQty = function(id){
     const item = cart.find(i => i.id === id);
 
     if(item.qty < item.stock){
+
         item.qty++;
+
+    }else{
+
+        showAlert("Not enough stock");
+
     }
 
     renderCart();

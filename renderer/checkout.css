@@ -60,7 +60,7 @@
 /* CASH INPUT AREA */
 
 #cashSection{
-    margin-top:35px;
+    margin-top:10px;
 }
 
 #cashInput{
@@ -80,21 +80,21 @@
 #changeDisplay{
     margin-top:12px;
     font-size:22px;
-    font-weight:700;
+    font-weight:600;
 }
 
 /* COMPLETE BUTTON */
 
 .complete-btn{
-    margin-top:30px;
+    margin-top:20px;
 
-    width:280px;
-    height:60px;
+    width:260px;
+    height:55px;
 
     border:none;
     border-radius:30px;
 
-    font-size:20px;
+    font-size:18px;
     font-weight:600;
 
     color:white;
@@ -102,7 +102,44 @@
     background:linear-gradient(135deg,#5b3df5,#8a6cff);
 
     cursor:pointer;
+
 }
 
+/* AMOUNT DUE */
 
+.amount-due{
+    margin-top:25px;
+    
+}
 
+.due-label{
+    font-size:18px;
+    color:#666;
+}
+
+.due-total{
+    font-size:48px;
+    font-weight:700;
+    color:#5b3df5;
+}
+
+.complete-sale-btn{
+
+    margin-top:20px;
+
+    width:260px;
+    height:55px;
+
+    border:none;
+    border-radius:30px;
+
+    font-size:18px;
+    font-weight:600;
+
+    color:white;
+
+    background:linear-gradient(135deg,#5b3df5,#8a6cff);
+
+    cursor:pointer;
+
+}
