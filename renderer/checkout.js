@@ -107,3 +107,46 @@ window.quickCash = function(amount){
     calculateChange();
 
 };
+
+document.addEventListener("keydown", function(e){
+
+    // Ctrl + F → focus search bar
+    if(e.ctrlKey && e.key === "f"){
+
+        e.preventDefault();
+
+        const search = document.getElementById("searchInput");
+
+        if(search){
+            showView("pos");
+            search.focus();
+        }
+
+    }
+
+    // Ctrl + C → focus cash input
+    if(e.ctrlKey && e.key === "c"){
+
+        e.preventDefault();
+
+        const cashInput = document.getElementById("cashInput");
+
+        if(cashInput){
+            showView("checkout");
+            selectPayment("cash");
+            cashInput.focus();
+        }
+
+    }
+
+    // Enter → Complete sale
+    if(e.key === "Enter"){
+        processCheckout();
+    }
+
+    // Escape → Back to POS
+    if(e.key === "Escape"){
+        showView("pos");
+    }
+
+});
