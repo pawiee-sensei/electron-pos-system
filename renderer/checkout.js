@@ -54,30 +54,34 @@ window.calculateChange = function(){
 window.processCheckout = async function(){
 
     if(window.cart.length === 0){
-    alert("Cart is empty");
+    showAlert("Cart is empty");
     return;
 }
 
-    if(!selectedPayment){
-        alert("Please select a payment method");
-        return;
-    }
+if(!selectedPayment){
+    showAlert("Please select payment method");
+    return;
+}
 
-    const total = window.getCartTotal();
+const total = window.getCartTotal();
 
-    // CASH VALIDATION FIRST
-    if(selectedPayment === "cash"){
+if(selectedPayment === "cash"){
 
-        const cash = parseFloat(
-            document.getElementById("cashInput").value
-        );
+    const cash = parseFloat(
+        document.getElementById("cashInput").value
+    );
 
-        if(isNaN(cash) || cash < total){
-            alert("Insufficient cash");
-            return;
-        }
+    if(isNaN(cash) || cash < total){
 
-    }
+    showAlert("Insufficient cash");
+
+    const input = document.getElementById("cashInput");
+    if(input) input.focus();
+
+    return;
+}
+
+}
 
     // PROCESS SALE
     const result = await window.api.processSale({

@@ -15,7 +15,7 @@ async function loadProducts() {
         }
 
         card.dataset.category = product.category || "General";
-
+        card.dataset.name = product.name.toLowerCase();
         card.onclick = () => addToCart(product);
 
         card.innerHTML = `
@@ -91,26 +91,50 @@ function showView(view){
 
     if(view === "checkout"){
 
-        checkoutBtn.style.display = "none";
+    checkoutBtn.style.display = "none";
 
-        const total = window.getCartTotal();
+    const total = window.getCartTotal();
 
-        const checkoutTotal = document.getElementById("checkoutTotal");
-        const amountDue = document.getElementById("amountDue");
+    const checkoutTotal = document.getElementById("checkoutTotal");
+    const amountDue = document.getElementById("amountDue");
 
-        if(checkoutTotal){
-            checkoutTotal.innerText = "₱" + total;
+    if(checkoutTotal){
+        checkoutTotal.innerText = "₱" + total;
+    }
+
+    if(amountDue){
+        amountDue.innerText = "₱" + total;
+    }
+
+    // Auto select cash
+    if(typeof window.selectPayment === "function"){
+        window.selectPayment("cash");
+    }
+
+    // Focus cash input
+    setTimeout(()=>{
+        const input = document.getElementById("cashInput");
+        if(input){
+            input.focus();
+            input.select();
         }
+    },150);
 
-        if(amountDue){
-            amountDue.innerText = "₱" + total;
-        }
+
+
+
 
     }else{
 
-        checkoutBtn.style.display = "block";
+    checkoutBtn.style.display = "block";
 
-    }
+    // Auto focus search when returning to POS
+    setTimeout(()=>{
+        const search = document.getElementById("searchInput");
+        if(search) search.focus();
+    },100);
+
+}
 
 }
 
@@ -134,14 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const value = e.target.value.toLowerCase();
 
-            document
-                .querySelectorAll(".product-card")
-                .forEach(card => {
+            document.querySelectorAll(".product-card").forEach(card => {
 
-                    const name = card.innerText.toLowerCase();
+                   const name = card.dataset.name || "";
 
-                    card.style.display =
-                        name.includes(value) ? "block" : "none";
+                        card.style.display =
+                            name.includes(value) ? "block" : "none";
 
                 });
 
