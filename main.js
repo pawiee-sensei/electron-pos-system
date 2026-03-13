@@ -3,6 +3,7 @@ const path = require("path");
 const products = require("./modules/products");
 const checkout = require("./modules/checkout");
 
+
 ipcMain.handle("process-sale", async (event,data)=>{
 
     return await checkout.processSale(
@@ -17,6 +18,8 @@ ipcMain.handle("get-products", async () => {
   const data = await products.getAllProducts();
   return data;
 });
+
+
 
 function createWindow() {
   const win = new BrowserWindow({

@@ -1,81 +1,81 @@
 const db = require("../db");
 
-async function processSale(cart,total,payment){
+async function processSale(cart, total, payment){
 
-    const conn = await db.getConnection();
+    const connection = await db.getConnection();
 
     try{
 
-        await conn.beginTransaction();
+        await connection.beginTransaction();
 
-        const [sale] = await conn.query(
-        "INSERT INTO sales(total_amount,payment_method) VALUES (?,?)",
-        [total,payment]
+        // 1️⃣ Insert sale record
+        const [saleResult] = await connection.execute(
+            `INSERT INTO sales (total_amount)
+             VALUES (?)`,
+            [total]
         );
 
-        const saleId = sale.insertId;
+        const saleId = saleResult.insertId;
 
+        // 2️⃣ Process each cart item
         for(const item of cart){
 
-            await conn.query(
-            `INSERT INTO sale_items
-            (sale_id,product_id,quantity,price)
-            VALUES (?,?,?,?)`,
-            [saleId,item.id,item.qty,item.price]
+            // Insert sale item
+            await connection.execute(
+                `INSERT INTO sale_items
+                (sale_id, product_id, quantity, price)
+                VALUES (?, ?, ?, ?)`,
+                [saleId, item.id, item.qty, item.price]
             );
 
-            await conn.query(
-            `UPDATE products
-             SET current_stock=current_stock-?
-             WHERE id=?`,
-            [item.qty,item.id]
+            // Deduct stock safely
+            const [stockUpdate] = await connection.execute(
+                `UPDATE products
+                 SET current_stock = current_stock - ?
+                 WHERE id = ? AND current_stock >= ?`,
+                [item.qty, item.id, item.qty]
             );
 
-            await conn.query(
-            `INSERT INTO stock_movements
-            (product_id,type,quantity,reference_id)
-            VALUES (?, 'sale', ?, ?)`,
-            [item.id,item.qty,saleId]
-            );
+            if(stockUpdate.affectedRows === 0){
+                throw new Error("Stock not sufficient");
+            }
 
+            // Insert stock movement log
+            await connection.execute(
+                `INSERT INTO stock_movements
+                (product_id, type, quantity, note)
+                VALUES (?, 'SALE', ?, ?)`,
+                [item.id, item.qty, `POS Sale #${saleId}`]
+            );
         }
 
-        await conn.commit();
+        // 3️⃣ Insert payment record
+        await connection.execute(
+            `INSERT INTO payments
+            (sale_id, amount, payment_method)
+            VALUES (?, ?, ?)`,
+            [saleId, total, payment]
+        );
 
-        return {success:true};
+        // 4️⃣ Commit transaction
+        await connection.commit();
 
-    }catch(err){
+        return { success:true, saleId };
 
-        await conn.rollback();
+    }catch(error){
 
-        throw err;
+        await connection.rollback();
+
+        console.error("SALE ERROR:", error);
+
+        return { success:false };
 
     }finally{
 
-        conn.release();
+        connection.release();
 
     }
 
 }
 
-module.exports = {processSale};
-
-async function processCheckout(){
-
-    const total = window.getCartTotal();
-
-    const result = await window.api.processSale({
-        cart: window.cart,
-        total,
-        payment: selectedPayment
-    });
-
-    if(result.success){
-
-        alert("Sale completed");
-
-        location.reload();
-
-    }
-
-}
+module.exports = { processSale };
