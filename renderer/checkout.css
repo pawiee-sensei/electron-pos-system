@@ -143,3 +143,59 @@
     cursor:pointer;
 
 }
+
+/* QUICK CASH */
+
+.cash-section{
+    margin-top:25px;
+}
+
+.amount-due-label{
+    font-size:14px;
+    color:#666;
+}
+
+.amount-due{
+    font-size:40px;
+    font-weight:700;
+    color:#5b3df5;
+    margin-bottom:15px;
+}
+
+#cashInput{
+    width:320px;
+    height:50px;
+
+    border-radius:10px;
+    border:1px solid #ddd;
+
+    padding:10px;
+
+    font-size:18px;
+
+    margin-bottom:15px;
+}
+
+.quick-cash{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.quick-cash button{
+    padding:10px 16px;
+
+    border:none;
+    border-radius:8px;
+
+    background:#f2f2f7;
+
+    cursor:pointer;
+
+    font-size:16px;
+    font-weight:600;
+}
+
+.quick-cash button:hover{
+    background:#e4e4f0;
+}

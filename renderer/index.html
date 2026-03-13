@@ -73,13 +73,24 @@
 
             </div>
 
-            <div id="cashSection" style="display:none">
+            <div id="cashSection" class="cash-section">
 
                 <input
                     id="cashInput"
                     placeholder="Enter cash"
                     oninput="calculateChange()"
                 />
+
+                <!-- QUICK CASH BUTTONS -->
+
+                <div class="quick-cash">
+
+                    <button onclick="quickCash(100)">₱100</button>
+                    <button onclick="quickCash(200)">₱200</button>
+                    <button onclick="quickCash(500)">₱500</button>
+                    <button onclick="quickCash(1000)">₱1000</button>
+
+                </div>
 
                 <div id="changeDisplay">
                     Change: ₱0

@@ -33,10 +33,12 @@ async function loadProducts() {
         `;
 
         grid.appendChild(card);
+
     });
 
     createCategories(products);
 }
+
 
 function createCategories(products){
 
@@ -48,13 +50,18 @@ function createCategories(products){
     categories.forEach(cat => {
 
         const tab = document.createElement("div");
+
         tab.className = "category-tab";
         tab.innerText = cat;
+
         tab.onclick = () => filterCategory(cat);
 
         tabs.appendChild(tab);
+
     });
+
 }
+
 
 function filterCategory(category){
 
@@ -67,51 +74,81 @@ function filterCategory(category){
         }
 
     });
+
 }
+
 
 function showView(view){
 
-    if(view === "checkout"){
+    const checkoutBtn = document.getElementById("checkoutBtn");
 
-    const total = window.getCartTotal();
-
-    document.getElementById("checkoutTotal").innerText =
-        "₱" + total;
-
-}
-
+    // hide all views
     document.getElementById("view-pos").classList.add("hidden");
     document.getElementById("view-checkout").classList.add("hidden");
 
+    // show selected view
     document.getElementById("view-" + view).classList.remove("hidden");
 
-    const checkoutBtn = document.getElementById("checkoutBtn");
+    if(view === "checkout"){
 
-    checkoutBtn.style.display = view === "checkout" ? "none" : "block";
+        checkoutBtn.style.display = "none";
+
+        const total = window.getCartTotal();
+
+        const checkoutTotal = document.getElementById("checkoutTotal");
+        const amountDue = document.getElementById("amountDue");
+
+        if(checkoutTotal){
+            checkoutTotal.innerText = "₱" + total;
+        }
+
+        if(amountDue){
+            amountDue.innerText = "₱" + total;
+        }
+
+    }else{
+
+        checkoutBtn.style.display = "block";
+
+    }
+
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
     loadProducts();
 
-    document.getElementById("checkoutBtn")
-        .addEventListener("click", () => showView("checkout"));
+    document
+        .getElementById("checkoutBtn")
+        .addEventListener("click", () => {
 
-    document.getElementById("searchInput")
+            showView("checkout");
+
+        });
+
+
+    document
+        .getElementById("searchInput")
         .addEventListener("input", e => {
 
             const value = e.target.value.toLowerCase();
 
-            document.querySelectorAll(".product-card").forEach(card => {
+            document
+                .querySelectorAll(".product-card")
+                .forEach(card => {
 
-                const name = card.innerText.toLowerCase();
+                    const name = card.innerText.toLowerCase();
 
-                card.style.display = name.includes(value) ? "block" : "none";
+                    card.style.display =
+                        name.includes(value) ? "block" : "none";
 
-            });
+                });
+
         });
 
 });
+
 
 function showAlert(message){
 

@@ -98,3 +98,12 @@ window.processCheckout = async function(){
 
 }
 
+window.quickCash = function(amount){
+
+    const input = document.getElementById("cashInput");
+
+    input.value = amount;
+
+    calculateChange();
+
+};
