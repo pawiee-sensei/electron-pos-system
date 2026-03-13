@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>POS System</title>
 <link rel="stylesheet" href="pos.css">
+<link rel="stylesheet" href="checkout.css">
 </head>
 
 <body>
@@ -74,7 +75,7 @@
 
             </div>
 
-            <button onclick="processCheckout()">
+            <button class="complete-btn" onclick="processCheckout()">
                 Complete Sale
             </button>
 
@@ -112,6 +113,10 @@
 
 </div> <!-- END app-layout -->
 
+<div id="posAlert"></div>
+
+<script src="cart.js"></script>
+<script src="ui.js"></script>
 <script src="pos.js"></script>
 <script src="checkout.js"></script>
 
