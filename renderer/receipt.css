@@ -1,0 +1,89 @@
+/* RECEIPT */
+
+.receipt-container{
+
+    width:420px;
+    margin:auto;
+    background:white;
+
+    padding:25px;
+    border-radius:10px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+
+    font-family:monospace;
+}
+
+.receipt-header{
+    text-align:center;
+}
+
+.receipt-header h2{
+    margin:0;
+}
+
+.receipt-sub{
+    font-size:12px;
+    color:#777;
+}
+
+.receipt-info{
+    margin-top:10px;
+    font-size:13px;
+}
+
+.receipt-divider{
+    border-top:1px dashed #ccc;
+    margin:15px 0;
+}
+
+.receipt-row{
+    display:flex;
+    justify-content:space-between;
+    margin:6px 0;
+}
+
+.receipt-summary{
+    font-weight:bold;
+}
+
+.receipt-buttons{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+    justify-content:center;
+}
+
+.receipt-buttons button{
+
+    padding:10px 16px;
+
+    border:none;
+    border-radius:6px;
+
+    background:#5b3df5;
+    color:white;
+
+    cursor:pointer;
+}
+
+.receipt-buttons button:hover{
+    opacity:0.9;
+}
+
+@media print{
+
+    body *{
+        visibility:hidden;
+    }
+
+    .receipt-container,
+    .receipt-container *{
+        visibility:visible;
+    }
+
+    .receipt-buttons{
+        display:none;
+    }
+
+}

@@ -5,6 +5,7 @@
 <title>POS System</title>
 <link rel="stylesheet" href="pos.css">
 <link rel="stylesheet" href="checkout.css">
+<link rel="stylesheet" href="receipt.css">
 </head>
 
 <body>
@@ -112,41 +113,53 @@
 
     <div class="receipt-container">
 
-        <h2>Receipt</h2>
+        <div class="receipt-header">
+            <h2>POS Electron</h2>
+            <div class="receipt-sub">Thank you for your purchase</div>
+        </div>
 
-        <div id="receiptSaleId"></div>
+        <div class="receipt-info">
+            <div id="receiptSaleId"></div>
+            <div id="receiptDate"></div>
+        </div>
+
+        <div class="receipt-divider"></div>
 
         <div class="receipt-items" id="receiptItems"></div>
 
         <div class="receipt-divider"></div>
 
-        <div class="receipt-row">
-            <span>Total</span>
-            <span id="receiptTotal"></span>
+        <div class="receipt-summary">
+
+            <div class="receipt-row">
+                <span>Total</span>
+                <span id="receiptTotal"></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Payment</span>
+                <span id="receiptPayment"></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Cash</span>
+                <span id="receiptCash"></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Change</span>
+                <span id="receiptChange"></span>
+            </div>
+
         </div>
 
-        <div class="receipt-row">
-            <span>Payment</span>
-            <span id="receiptPayment"></span>
-        </div>
-
-        <div class="receipt-row">
-            <span>Cash</span>
-            <span id="receiptCash"></span>
-        </div>
-
-        <div class="receipt-row">
-            <span>Change</span>
-            <span id="receiptChange"></span>
-        </div>
+        <div class="receipt-divider"></div>
 
         <div class="receipt-buttons">
 
-            <button onclick="printReceipt()">Print Receipt</button>
-
+            <button onclick="printReceipt()">Print</button>
             <button onclick="newSale()">New Sale</button>
-
-            <button onclick="showView('pos')">Back to POS</button>
+            <button onclick="showView('pos')">Back</button>
 
         </div>
 
