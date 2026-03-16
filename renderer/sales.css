@@ -1,14 +1,16 @@
 /* SALES TABLE */
 
 .sales-table{
-    width:100%;
+    width:95%;
+    margin: 0 auto;   /* centers the table */
+
     border-collapse:collapse;
     background:white;
     border-radius:10px;
     overflow:hidden;
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
-
+    
 .sales-table thead{
     background:#f5f6fa;
 }
@@ -65,4 +67,39 @@
 
 .void-btn:hover{
     background:#e63c3f;
+}
+
+.sales-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.sales-filters{
+display:flex;
+gap:10px;
+}
+
+.void-btn{
+
+padding:6px 12px;
+border:none;
+border-radius:6px;
+
+background:#ff4d4f;
+color:white;
+
+cursor:pointer;
+}
+
+.void-btn:hover{
+background:#d9363e;
+}
+
+.sales-table tbody tr:hover{
+
+background:#f5f7ff;
+cursor:pointer;
+
 }

@@ -1,21 +1,46 @@
 const db = require("../db");
 
+
 // ======================================
-// GET SALES LIST
+// GET SALES LIST (WITH PAYMENT METHOD)
 // ======================================
 
-async function getSales(){
+async function getSales(date = null){
 
-    const [rows] = await db.execute(`
-        SELECT id,total_amount,status,created_at
-        FROM sales
-        ORDER BY id DESC
-        LIMIT 50
-    `);
+    let query = `
+        SELECT 
+            s.id,
+            s.total_amount,
+            s.status,
+            s.created_at,
+            p.payment_method
+        FROM sales s
+        LEFT JOIN payments p
+        ON p.sale_id = s.id
+    `;
+
+    let params = [];
+
+    if(date){
+
+        query += `
+            WHERE DATE(s.created_at) = ?
+        `;
+
+        params.push(date);
+    }
+
+    query += `
+        ORDER BY s.id DESC
+        LIMIT 100
+    `;
+
+    const [rows] = await db.execute(query, params);
 
     return rows;
 
 }
+
 
 
 // ======================================
@@ -25,15 +50,20 @@ async function getSales(){
 async function getSaleItems(saleId){
 
     const [rows] = await db.execute(`
-        SELECT p.name, si.quantity, si.price
+        SELECT 
+            p.name,
+            si.quantity,
+            si.price
         FROM sale_items si
-        JOIN products p ON p.id = si.product_id
+        JOIN products p 
+        ON p.id = si.product_id
         WHERE si.sale_id = ?
     `,[saleId]);
 
     return rows;
 
 }
+
 
 
 // ======================================
@@ -48,6 +78,7 @@ async function voidSale(saleId){
 
         await connection.beginTransaction();
 
+        // Get sale items first
         const [items] = await connection.execute(`
             SELECT product_id, quantity
             FROM sale_items
@@ -57,7 +88,7 @@ async function voidSale(saleId){
 
         for(const item of items){
 
-            // restore stock
+            // Restore stock
             await connection.execute(`
                 UPDATE products
                 SET current_stock = current_stock + ?
@@ -65,7 +96,7 @@ async function voidSale(saleId){
             `,[item.quantity,item.product_id]);
 
 
-            // log movement
+            // Insert stock movement log
             await connection.execute(`
                 INSERT INTO stock_movements
                 (product_id,type,quantity,note)
@@ -75,9 +106,10 @@ async function voidSale(saleId){
         }
 
 
+        // Mark sale as voided
         await connection.execute(`
             UPDATE sales
-            SET status='VOIDED'
+            SET status = 'VOIDED'
             WHERE id = ?
         `,[saleId]);
 
@@ -89,7 +121,8 @@ async function voidSale(saleId){
     }catch(err){
 
         await connection.rollback();
-        console.error(err);
+
+        console.error("VOID SALE ERROR:",err);
 
         return { success:false };
 
@@ -100,5 +133,6 @@ async function voidSale(saleId){
     }
 
 }
+
 
 module.exports = { getSales, getSaleItems, voidSale };

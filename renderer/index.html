@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>POS System</title>
+
 <link rel="stylesheet" href="pos.css">
 <link rel="stylesheet" href="checkout.css">
 <link rel="stylesheet" href="receipt.css">
 <link rel="stylesheet" href="sales.css">
+
 </head>
 
 <body>
@@ -24,8 +26,10 @@
 
     </div>
 
+
     <!-- MAIN CONTENT -->
     <div class="main-content">
+
 
         <!-- POS VIEW -->
         <div id="view-pos" class="view">
@@ -39,6 +43,8 @@
             <div id="productGrid" class="product-grid"></div>
 
         </div>
+
+
 
         <!-- CHECKOUT VIEW -->
         <div id="view-checkout" class="view hidden">
@@ -64,6 +70,7 @@
 
             </div>
 
+
             <div class="amount-due">
 
                 <div class="due-label">
@@ -75,6 +82,7 @@
                 </div>
 
             </div>
+
 
             <div id="cashSection" class="cash-section">
 
@@ -102,28 +110,54 @@
             </div>
 
 
-
             <button class="complete-sale-btn" onclick="processCheckout()">
                 Complete Sale
             </button>
 
         </div>
 
-        <!-- TRANSACTION  HISTORY -->
+
+
+        <!-- TRANSACTION HISTORY -->
         <div id="view-sales" class="view hidden">
 
-        <h2>Transaction History</h2>
 
-                <table class="sales-table">
+            <div class="sales-header">
 
-                    <thead>
+                <h2>Transaction History</h2>
+
+                <div class="sales-filters">
+
+                    <input
+                        type="date"
+                        id="salesDateFilter"
+                    >
+
+                    <button onclick="loadSales()">
+                        Search
+                    </button>
+
+                    <button onclick="clearSalesFilter()">
+                        Today
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <table class="sales-table">
+
+                <thead>
                     <tr>
-                    <th>Sale ID</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                        <th>Sale ID</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
                     </tr>
-                    </thead>
+                </thead>
 
                 <tbody id="salesTableBody">
                 </tbody>
@@ -133,67 +167,70 @@
         </div>
 
 
+
         <!-- RECEIPT VIEW -->
+        <div id="view-receipt" class="view hidden">
 
-<div id="view-receipt" class="view hidden">
+            <div class="receipt-container">
 
-    <div class="receipt-container">
+                <div class="receipt-header">
+                    <h2>POS Electron</h2>
+                    <div class="receipt-sub">Thank you for your purchase</div>
+                </div>
 
-        <div class="receipt-header">
-            <h2>POS Electron</h2>
-            <div class="receipt-sub">Thank you for your purchase</div>
-        </div>
+                <div class="receipt-info">
+                    <div id="receiptSaleId"></div>
+                    <div id="receiptDate"></div>
+                </div>
 
-        <div class="receipt-info">
-            <div id="receiptSaleId"></div>
-            <div id="receiptDate"></div>
-        </div>
+                <div class="receipt-divider"></div>
 
-        <div class="receipt-divider"></div>
+                <div class="receipt-items" id="receiptItems"></div>
 
-        <div class="receipt-items" id="receiptItems"></div>
+                <div class="receipt-divider"></div>
 
-        <div class="receipt-divider"></div>
+                <div class="receipt-summary">
 
-        <div class="receipt-summary">
+                    <div class="receipt-row">
+                        <span>Total</span>
+                        <span id="receiptTotal"></span>
+                    </div>
 
-            <div class="receipt-row">
-                <span>Total</span>
-                <span id="receiptTotal"></span>
+                    <div class="receipt-row">
+                        <span>Payment</span>
+                        <span id="receiptPayment"></span>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Cash</span>
+                        <span id="receiptCash"></span>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Change</span>
+                        <span id="receiptChange"></span>
+                    </div>
+
+                </div>
+
+                <div class="receipt-divider"></div>
+
+                <div class="receipt-buttons">
+
+                    <button onclick="printReceipt()">Print</button>
+                    <button onclick="newSale()">New Sale</button>
+                    <button onclick="showView('pos')">Back</button>
+
+                </div>
+
             </div>
 
-            <div class="receipt-row">
-                <span>Payment</span>
-                <span id="receiptPayment"></span>
-            </div>
-
-            <div class="receipt-row">
-                <span>Cash</span>
-                <span id="receiptCash"></span>
-            </div>
-
-            <div class="receipt-row">
-                <span>Change</span>
-                <span id="receiptChange"></span>
-            </div>
-
         </div>
 
-        <div class="receipt-divider"></div>
 
-        <div class="receipt-buttons">
-
-            <button onclick="printReceipt()">Print</button>
-            <button onclick="newSale()">New Sale</button>
-            <button onclick="showView('pos')">Back</button>
-
-        </div>
-
-    </div>
-
-</div>
 
     </div> <!-- END main-content -->
+
 
 
     <!-- CART PANEL -->
@@ -225,7 +262,9 @@
 
 </div> <!-- END app-layout -->
 
-<div id="posAlert"></div>  
+
+<div id="posAlert"></div>
+
 
 <script src="cart.js"></script>
 <script src="ui.js"></script>

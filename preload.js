@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("api", {
 
   processSale: (data) => ipcRenderer.invoke("process-sale", data),
 
-  getSales: () => ipcRenderer.invoke("get-sales"),
+  getSales: (date) => ipcRenderer.invoke("get-sales", date),
 
   getSaleItems: (id) => ipcRenderer.invoke("get-sale-items", id),
 

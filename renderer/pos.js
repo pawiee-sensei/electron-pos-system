@@ -130,6 +130,11 @@ function showView(view){
         receiptView.classList.add("hidden");
     }
 
+    const salesView = document.getElementById("view-sales");
+    if(salesView){
+        salesView.classList.add("hidden");
+    }
+
     // Show selected view
     document.getElementById("view-" + view).classList.remove("hidden");
 

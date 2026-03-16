@@ -241,7 +241,7 @@ document.addEventListener("keydown", function(e){
     }
 
     // Ctrl + C → Focus cash input
-    if(e.ctrlKey && e.key === "c"){
+    if(e.ctrlKey && e.key === "g"){
 
         e.preventDefault();
 

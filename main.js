@@ -5,8 +5,8 @@ const checkout = require("./modules/checkout");
 const sales = require("./modules/sales");
 
 
-ipcMain.handle("get-sales", async () => {
-    return await sales.getSales();
+ipcMain.handle("get-sales", async (event,date) => {
+    return await sales.getSales(date);
 });
 
 ipcMain.handle("get-sale-items", async (event,id) => {
@@ -16,6 +16,7 @@ ipcMain.handle("get-sale-items", async (event,id) => {
 ipcMain.handle("void-sale", async (event,id) => {
     return await sales.voidSale(id);
 });
+
 
 ipcMain.handle("process-sale", async (event,data)=>{
 

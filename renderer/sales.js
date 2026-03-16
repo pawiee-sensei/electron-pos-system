@@ -4,7 +4,11 @@
 
 window.loadSales = async function(){
 
-    const sales = await window.api.getSales();
+    const dateInput = document.getElementById("salesDateFilter");
+
+    const date = dateInput && dateInput.value ? dateInput.value : null;
+
+    const sales = await window.api.getSales(date);
 
     const body = document.getElementById("salesTableBody");
 
@@ -17,8 +21,25 @@ window.loadSales = async function(){
         row.innerHTML = `
         <td>#${sale.id}</td>
         <td>₱${sale.total_amount}</td>
-        <td>${sale.status}</td>
+        <td>${sale.payment_method?.toUpperCase() || "-"}</td>
+        <td class="status-${sale.status.toLowerCase()}">
+        ${sale.status}
+        </td>
         <td>${new Date(sale.created_at).toLocaleString()}</td>
+        <td>
+
+        ${
+        sale.status !== "VOIDED"
+        ?
+        `<button class="void-btn"
+        onclick="voidSale(${sale.id});event.stopPropagation();">
+        Void
+        </button>`
+        :
+        "-"
+        }
+
+        </td>
         `;
 
         row.onclick = () => toggleSaleDetails(row,sale);
@@ -27,7 +48,7 @@ window.loadSales = async function(){
 
     });
 
-};
+}
 
 
 
@@ -147,3 +168,13 @@ window.voidSale = async function(id){
     }
 
 };
+
+window.clearSalesFilter = function(){
+
+    const input = document.getElementById("salesDateFilter");
+
+    input.value = "";
+
+    loadSales();
+
+}
