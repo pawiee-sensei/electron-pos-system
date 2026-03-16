@@ -1,0 +1,68 @@
+/* SALES TABLE */
+
+.sales-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.sales-table thead{
+    background:#f5f6fa;
+}
+
+.sales-table th{
+    text-align:left;
+    padding:14px;
+    font-size:14px;
+    color:#555;
+}
+
+.sales-table td{
+    padding:14px;
+    border-top:1px solid #eee;
+    font-size:14px;
+}
+
+/* Hover effect */
+
+.sales-table tbody tr:hover{
+    background:#f7f8fc;
+    cursor:pointer;
+}
+
+/* Expand row */
+
+.sale-details{
+    background:#fafafa;
+}
+
+.sale-items{
+    padding:10px 20px;
+}
+
+/* Item rows */
+
+.sale-item{
+    display:flex;
+    justify-content:space-between;
+    padding:4px 0;
+}
+
+/* Void button */
+
+.void-btn{
+    margin-top:10px;
+    padding:8px 14px;
+    border:none;
+    border-radius:6px;
+    background:#ff4d4f;
+    color:white;
+    cursor:pointer;
+}
+
+.void-btn:hover{
+    background:#e63c3f;
+}

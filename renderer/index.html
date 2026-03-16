@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="pos.css">
 <link rel="stylesheet" href="checkout.css">
 <link rel="stylesheet" href="receipt.css">
+<link rel="stylesheet" href="sales.css">
 </head>
 
 <body>
@@ -109,16 +110,27 @@
         </div>
 
         <!-- TRANSACTION  HISTORY -->
+        <div id="view-sales" class="view hidden">
 
-            <div id="view-sales" class="view hidden">
+        <h2>Transaction History</h2>
 
-                <h2>Transaction History</h2>
+                <table class="sales-table">
 
-                <div id="salesList"></div>
+                    <thead>
+                    <tr>
+                    <th>Sale ID</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    </tr>
+                    </thead>
 
-                <div id="saleDetails"></div>
+                <tbody id="salesTableBody">
+                </tbody>
 
-                </div>
+            </table>
+
+        </div>
 
 
         <!-- RECEIPT VIEW -->
