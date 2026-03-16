@@ -1,12 +1,49 @@
-// ====================================
-// LOAD SALES TABLE
-// ====================================
+// =======================================================
+// TRACK CURRENTLY EXPANDED ROW
+// =======================================================
 
-window.loadSales = async function(){
+let expandedRow = null;
 
-    const dateInput = document.getElementById("salesDateFilter");
+// =======================================================
+// AUTO FILTER WHEN DATE CHANGES
+// =======================================================
 
-    const date = dateInput && dateInput.value ? dateInput.value : null;
+document.addEventListener("DOMContentLoaded", () => {
+
+const dateInput = document.getElementById("salesDateFilter");
+
+if(dateInput){
+
+dateInput.addEventListener("change", () => {
+
+const date = dateInput.value || null;
+
+loadSales(date);
+
+});
+
+}
+
+});
+
+// =======================================================
+// LOAD SALES LIST
+// =======================================================
+
+window.loadSales = async function(date = undefined){
+
+    // if date is undefined, read from date picker
+    if(date === undefined){
+
+        const input = document.getElementById("salesDateFilter");
+
+        if(input && input.value){
+            date = input.value;
+        }else{
+            date = null;
+        }
+
+    }
 
     const sales = await window.api.getSales(date);
 
@@ -20,25 +57,36 @@ window.loadSales = async function(){
 
         row.innerHTML = `
         <td>#${sale.id}</td>
+
         <td>₱${sale.total_amount}</td>
-        <td>${sale.payment_method?.toUpperCase() || "-"}</td>
+
+        <td>
+        ${sale.payment_method
+            ? sale.payment_method.toUpperCase()
+            : "-"
+        }
+        </td>
+
         <td class="status-${sale.status.toLowerCase()}">
         ${sale.status}
         </td>
-        <td>${new Date(sale.created_at).toLocaleString()}</td>
-        <td>
 
+        <td>
+        ${new Date(sale.created_at).toLocaleString()}
+        </td>
+
+        <td>
         ${
         sale.status !== "VOIDED"
         ?
-        `<button class="void-btn"
+        `<button
+        class="void-btn"
         onclick="voidSale(${sale.id});event.stopPropagation();">
         Void
         </button>`
         :
         "-"
         }
-
         </td>
         `;
 
@@ -48,22 +96,31 @@ window.loadSales = async function(){
 
     });
 
-}
+};
 
 
 
-// ====================================
-// EXPAND SALE DETAILS
-// ====================================
+// =======================================================
+// EXPAND / COLLAPSE SALE DETAILS
+// =======================================================
 
 async function toggleSaleDetails(row,sale){
 
-    // remove if already expanded
     const next = row.nextElementSibling;
 
+    // collapse if clicking the same row
     if(next && next.classList.contains("sale-details")){
         next.remove();
+        expandedRow = null;
         return;
+    }
+
+    // collapse previous expanded row
+    if(expandedRow){
+        const prev = expandedRow.nextElementSibling;
+        if(prev && prev.classList.contains("sale-details")){
+            prev.remove();
+        }
     }
 
     const items = await window.api.getSaleItems(sale.id);
@@ -72,33 +129,55 @@ async function toggleSaleDetails(row,sale){
     detailsRow.className = "sale-details";
 
     const td = document.createElement("td");
-    td.colSpan = 4;
+    td.colSpan = 6;
 
-    let html = `<div class="sale-items">`;
+    let html = `
+    <div class="sale-details-container">
+
+        <div class="sale-details-header">
+            Items Purchased
+        </div>
+
+        <div class="sale-items">
+    `;
 
     items.forEach(item => {
 
         html += `
-        <div class="sale-item">
-        <span>${item.name} x${item.quantity}</span>
-        <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+        <div class="sale-item-row">
+
+            <span class="item-name">
+            ${item.name}
+            </span>
+
+            <span class="item-qty">
+            x${item.quantity}
+            </span>
+
+            <span class="item-total">
+            ₱${(item.price * item.quantity).toFixed(2)}
+            </span>
+
         </div>
         `;
 
     });
 
-    if(sale.status !== "VOIDED"){
+    html += `
+        </div>
 
-        html += `
-        <button class="void-btn"
-        onclick="voidSale(${sale.id});event.stopPropagation();">
-        Void Transaction
-        </button>
-        `;
+        <div class="sale-total-row">
 
-    }
+            <span>Total</span>
 
-    html += `</div>`;
+            <span>
+            ₱${sale.total_amount}
+            </span>
+
+        </div>
+
+    </div>
+    `;
 
     td.innerHTML = html;
 
@@ -106,50 +185,15 @@ async function toggleSaleDetails(row,sale){
 
     row.after(detailsRow);
 
-}
-
-
-// ====================================
-// VIEW SALE DETAILS
-// ====================================
-
-async function viewSale(id,status){
-
-    const items = await window.api.getSaleItems(id);
-
-    const details = document.getElementById("saleDetails");
-
-    let html = `<h3>Sale #${id}</h3>`;
-
-    items.forEach(item => {
-
-        html += `
-            <div>
-                ${item.name} x${item.quantity}
-                ₱${item.price * item.quantity}
-            </div>
-        `;
-
-    });
-
-    if(status !== "VOIDED"){
-
-        html += `
-        <button onclick="voidSale(${id})">
-        VOID TRANSACTION
-        </button>
-        `;
-
-    }
-
-    details.innerHTML = html;
+    expandedRow = row;
 
 }
 
 
-// ====================================
-// VOID SALE
-// ====================================
+
+// =======================================================
+// VOID TRANSACTION
+// =======================================================
 
 window.voidSale = async function(id){
 
@@ -163,18 +207,61 @@ window.voidSale = async function(id){
 
         loadSales();
 
-        document.getElementById("saleDetails").innerHTML="";
+    }else{
+
+        showAlert("Failed to void transaction");
 
     }
 
 };
 
+
+
+// =======================================================
+// CLEAR DATE FILTER
+// =======================================================
+
 window.clearSalesFilter = function(){
 
     const input = document.getElementById("salesDateFilter");
 
-    input.value = "";
+    if(input){
+        input.value = "";
+    }
 
     loadSales();
 
+};
+
+window.loadTodaySales = function(){
+
+const today = new Date().toISOString().split("T")[0];
+
+const input = document.getElementById("salesDateFilter");
+
+if(input){
+input.value = today;
 }
+
+loadSales(today);
+
+};
+
+// =======================================================
+// LOAD ALL SALES
+// =======================================================
+
+window.loadAllSales = function(){
+
+    const input = document.getElementById("salesDateFilter");
+
+    if(input){
+        input.value = "";
+    }
+
+    loadSales(null);
+
+};
+
+
+

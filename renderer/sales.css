@@ -41,9 +41,6 @@
     background:#fafafa;
 }
 
-.sale-items{
-    padding:10px 20px;
-}
 
 /* Item rows */
 
@@ -77,6 +74,7 @@ margin-bottom:20px;
 }
 
 .sales-filters{
+align-items: center;
 display:flex;
 gap:10px;
 }
@@ -101,5 +99,168 @@ background:#d9363e;
 
 background:#f5f7ff;
 cursor:pointer;
+
+}
+
+
+
+
+
+
+
+/* EXPANDABLE DETAILS */
+
+.sale-details-container{
+
+background:#fafbff;
+border-radius:10px;
+padding:16px;
+
+margin:10px 0;
+border:1px solid #ececf4;
+
+}
+
+/* Header */
+
+.sale-details-header{
+
+font-weight:600;
+font-size:14px;
+margin-bottom:10px;
+color:#666;
+
+}
+
+/* Items */
+
+.sale-items{
+
+display:flex;
+flex-direction:column;
+gap:8px;
+
+}
+
+/* Row */
+
+.sale-item-row{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:6px 0;
+
+border-bottom:1px dashed #e6e6e6;
+
+font-size:14px;
+
+}
+
+/* Name */
+
+.item-name{
+
+flex:2;
+
+}
+
+/* Qty */
+
+.item-qty{
+
+flex:1;
+text-align:center;
+color:#888;
+
+}
+
+/* Price */
+
+.item-total{
+
+flex:1;
+text-align:right;
+font-weight:500;
+
+}
+
+/* Total Row */
+
+.sale-total-row{
+
+display:flex;
+justify-content:space-between;
+
+margin-top:12px;
+padding-top:10px;
+
+border-top:2px solid #eee;
+
+font-weight:600;
+font-size:15px;
+
+}
+
+.sale-details-container{
+
+overflow:hidden;
+animation:expandRow 0.25s ease;
+
+}
+
+@keyframes expandRow{
+
+from{
+opacity:0;
+transform:translateY(-5px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* Date input */
+
+.date-filter{
+
+padding:6px 10px;
+
+border:1px solid #ddd;
+border-radius:6px;
+
+font-size:14px;
+
+background:white;
+
+}
+
+/* Filter buttons */
+
+.filter-btn{
+
+padding:6px 14px;
+
+border:1px solid #ddd;
+border-radius:6px;
+
+background:white;
+
+cursor:pointer;
+
+font-size:14px;
+
+transition:all 0.15s ease;
+
+}
+
+.filter-btn:hover{
+
+background:#f3f4ff;
+border-color:#6a5cff;
 
 }

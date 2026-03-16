@@ -128,18 +128,20 @@
 
                 <div class="sales-filters">
 
-                    <input
-                        type="date"
-                        id="salesDateFilter"
-                    >
 
-                    <button onclick="loadSales()">
-                        Search
-                    </button>
+                <input
+                type="date"
+                id="salesDateFilter"
+                class="date-filter"
+                />
 
-                    <button onclick="clearSalesFilter()">
-                        Today
-                    </button>
+                <button class="filter-btn" onclick="loadTodaySales()">
+                Today
+                </button>
+
+                <button class="filter-btn" onclick="loadAllSales()">
+                All
+                </button>
 
                 </div>
 
