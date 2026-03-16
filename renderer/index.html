@@ -106,6 +106,54 @@
 
         </div>
 
+        <!-- RECEIPT VIEW -->
+
+<div id="view-receipt" class="view hidden">
+
+    <div class="receipt-container">
+
+        <h2>Receipt</h2>
+
+        <div id="receiptSaleId"></div>
+
+        <div class="receipt-items" id="receiptItems"></div>
+
+        <div class="receipt-divider"></div>
+
+        <div class="receipt-row">
+            <span>Total</span>
+            <span id="receiptTotal"></span>
+        </div>
+
+        <div class="receipt-row">
+            <span>Payment</span>
+            <span id="receiptPayment"></span>
+        </div>
+
+        <div class="receipt-row">
+            <span>Cash</span>
+            <span id="receiptCash"></span>
+        </div>
+
+        <div class="receipt-row">
+            <span>Change</span>
+            <span id="receiptChange"></span>
+        </div>
+
+        <div class="receipt-buttons">
+
+            <button onclick="printReceipt()">Print Receipt</button>
+
+            <button onclick="newSale()">New Sale</button>
+
+            <button onclick="showView('pos')">Back to POS</button>
+
+        </div>
+
+    </div>
+
+</div>
+
     </div> <!-- END main-content -->
 
 
@@ -144,6 +192,7 @@
 <script src="ui.js"></script>
 <script src="pos.js"></script>
 <script src="checkout.js"></script>
+<script src="receipt.js"></script>
 
 </body>
 </html>

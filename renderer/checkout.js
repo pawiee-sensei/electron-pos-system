@@ -1,17 +1,35 @@
+// =======================================================
+// PAYMENT STATE
+// =======================================================
+
+// This variable stores the currently selected payment method
+// Example values: "cash", "card", "gcash"
 let selectedPayment = null;
 
+
+
+// =======================================================
+// SELECT PAYMENT METHOD
+// =======================================================
+
+// Expose the function globally so it can be called from HTML
+// Example: onclick="selectPayment('cash')"
 window.selectPayment = function(method){
 
+    // Save the selected payment type
     selectedPayment = method;
 
+    // Remove "active" style from all payment buttons
     document
     .querySelectorAll(".payment-option")
     .forEach(el => el.classList.remove("active"));
 
+    // Add "active" style to the selected payment button
     document
     .getElementById("pay-"+method)
     .classList.add("active");
 
+    // Show cash input section only when payment is cash
     if(method === "cash"){
         document.getElementById("cashSection").style.display="block";
     }else{
@@ -20,12 +38,22 @@ window.selectPayment = function(method){
 
 }
 
+
+
+// =======================================================
+// CALCULATE CHANGE
+// =======================================================
+
+// This function calculates the change after the cashier enters cash
+// It runs automatically when the cashier types in the cash input field
 window.calculateChange = function(){
 
+    // Get the cash entered by the cashier
     const cash = parseFloat(
         document.getElementById("cashInput").value
     );
 
+    // Get the total amount displayed in the cart
     const totalText = document
         .getElementById("totalAmount")
         .innerText
@@ -33,88 +61,172 @@ window.calculateChange = function(){
 
     const total = parseFloat(totalText);
 
+    // If no valid number is entered yet
     if(isNaN(cash)){
         document.getElementById("changeDisplay").innerText =
             "Change: ₱0";
         return;
     }
 
+    // Calculate change
     const change = cash - total;
 
+    // If the customer has not given enough money
     if(change < 0){
         document.getElementById("changeDisplay").innerText =
             "Insufficient Cash";
     }else{
+
+        // Display calculated change
         document.getElementById("changeDisplay").innerText =
             "Change: ₱" + change.toFixed(2);
     }
 
 };
 
+
+
+// =======================================================
+// PROCESS CHECKOUT
+// =======================================================
+
 window.processCheckout = async function(){
 
+    // Prevent checkout if cart is empty
     if(window.cart.length === 0){
-    showAlert("Cart is empty");
-    return;
-}
+        showAlert("Cart is empty");
+        return;
+    }
 
-if(!selectedPayment){
-    showAlert("Please select payment method");
-    return;
-}
+    // Ensure a payment method is selected
+    if(!selectedPayment){
+        showAlert("Please select payment method");
+        return;
+    }
 
-const total = window.getCartTotal();
+    // Get total cart amount
+    const total = window.getCartTotal();
 
-if(selectedPayment === "cash"){
+    // Validate cash input
+    if(selectedPayment === "cash"){
 
-    const cash = parseFloat(
-        document.getElementById("cashInput").value
-    );
+        const cash = parseFloat(
+            document.getElementById("cashInput").value
+        );
 
-    if(isNaN(cash) || cash < total){
+        if(isNaN(cash) || cash < total){
 
-    showAlert("Insufficient cash");
+            showAlert("Insufficient cash");
 
-    const input = document.getElementById("cashInput");
-    if(input) input.focus();
+            const input = document.getElementById("cashInput");
+            if(input) input.focus();
 
-    return;
-}
+            return;
+        }
 
-}
+    }
 
-    // PROCESS SALE
+    // Send sale data to backend
     const result = await window.api.processSale({
         cart: window.cart,
         total,
         payment: selectedPayment
     });
 
-    if(result.success){
+    
 
-        alert("Sale completed");
+   if(result.success){
 
-        location.reload();
+    const paymentMethod = selectedPayment;
 
+    const cash = parseFloat(
+        document.getElementById("cashInput").value || 0
+    );
+
+    const changeText = document
+        .getElementById("changeDisplay")
+        .innerText
+        .replace("Change: ₱","");
+
+    const change = parseFloat(changeText) || 0;
+
+    const receiptItems = [...window.cart];
+
+    // show receipt BEFORE resetting state
+    showReceipt({
+        saleId: result.saleId,
+        items: receiptItems,
+        total: total,
+        payment: paymentMethod,
+        cash: cash,
+        change: change
+    });
+
+    // clear cart
+    window.cart.length = 0;
+    renderCart();
+
+    // reset payment UI
+    selectedPayment = null;
+
+    document
+    .querySelectorAll(".payment-option")
+    .forEach(el => el.classList.remove("active"));
+
+    // reset cash input
+    const cashInput = document.getElementById("cashInput");
+    if(cashInput){
+        cashInput.value = "";
     }
 
-    
+    const changeDisplay = document.getElementById("changeDisplay");
+    if(changeDisplay){
+        changeDisplay.innerText = "Change: ₱0";
+    }
+
+    // reload products so stock updates
+    if(typeof loadProducts === "function"){
+        loadProducts();
+    }
+
+}else{
+
+    showAlert("Transaction failed");
 
 }
 
+}
+
+
+
+// =======================================================
+// QUICK CASH BUTTONS
+// =======================================================
+
+// Allows cashier to click preset cash amounts
+// Example buttons: ₱100, ₱200, ₱500, ₱1000
 window.quickCash = function(amount){
 
     const input = document.getElementById("cashInput");
 
+    // Auto-fill the cash input
     input.value = amount;
 
+    // Recalculate change automatically
     calculateChange();
 
 };
 
+
+
+// =======================================================
+// KEYBOARD SHORTCUTS
+// =======================================================
+
+// Adds keyboard controls for faster cashier operation
 document.addEventListener("keydown", function(e){
 
-    // Ctrl + F → focus search bar
+    // Ctrl + F → Focus search bar
     if(e.ctrlKey && e.key === "f"){
 
         e.preventDefault();
@@ -128,7 +240,7 @@ document.addEventListener("keydown", function(e){
 
     }
 
-    // Ctrl + C → focus cash input
+    // Ctrl + C → Focus cash input
     if(e.ctrlKey && e.key === "c"){
 
         e.preventDefault();
@@ -148,9 +260,10 @@ document.addEventListener("keydown", function(e){
         processCheckout();
     }
 
-    // Escape → Back to POS
+    // Escape → Return to POS screen
     if(e.key === "Escape"){
         showView("pos");
     }
 
 });
+
