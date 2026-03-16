@@ -19,6 +19,7 @@
 
         <button onclick="showView('pos')">POS</button>
         <button onclick="showView('checkout')">Checkout</button>
+        <button onclick="showView('sales')">Transactions</button>
 
     </div>
 
@@ -106,6 +107,19 @@
             </button>
 
         </div>
+
+        <!-- TRANSACTION  HISTORY -->
+
+            <div id="view-sales" class="view hidden">
+
+                <h2>Transaction History</h2>
+
+                <div id="salesList"></div>
+
+                <div id="saleDetails"></div>
+
+                </div>
+
 
         <!-- RECEIPT VIEW -->
 
@@ -206,6 +220,7 @@
 <script src="pos.js"></script>
 <script src="checkout.js"></script>
 <script src="receipt.js"></script>
+<script src="sales.js"></script>
 
 </body>
 </html>

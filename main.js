@@ -2,7 +2,20 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const products = require("./modules/products");
 const checkout = require("./modules/checkout");
+const sales = require("./modules/sales");
 
+
+ipcMain.handle("get-sales", async () => {
+    return await sales.getSales();
+});
+
+ipcMain.handle("get-sale-items", async (event,id) => {
+    return await sales.getSaleItems(id);
+});
+
+ipcMain.handle("void-sale", async (event,id) => {
+    return await sales.voidSale(id);
+});
 
 ipcMain.handle("process-sale", async (event,data)=>{
 

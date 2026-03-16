@@ -133,6 +133,12 @@ function showView(view){
     // Show selected view
     document.getElementById("view-" + view).classList.remove("hidden");
 
+    if(view === "sales"){
+    if(typeof loadSales === "function"){
+        loadSales();
+    }
+}
+
     if(view === "checkout"){
 
         // Hide checkout button when already inside checkout screen
