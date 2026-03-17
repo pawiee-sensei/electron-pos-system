@@ -264,3 +264,37 @@ background:#f3f4ff;
 border-color:#6a5cff;
 
 }
+
+.sale-details-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:10px;
+}
+
+.void-badge{
+    background:#e53935;
+    color:white;
+    padding:4px 10px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:600;
+    text-align:right;
+}
+
+.void-reason-text{
+    display:block;
+    font-size:11px;
+    opacity:0.9;
+    font-weight:400;
+}
+
+.status-voided{
+    color:#e53935;
+    font-weight:600;
+}
+
+.status-completed{
+    color:#17c920;
+    font-weight:600;
+}

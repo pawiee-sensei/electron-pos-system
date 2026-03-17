@@ -72,7 +72,10 @@ async function getSaleItems(saleId){
 // VOID TRANSACTION
 // ======================================
 
-async function voidSale(saleId){
+async function voidSale(data){
+
+    const saleId = data.saleId;
+    const reason = data.reason;
 
     const connection = await db.getConnection();
 
@@ -80,25 +83,20 @@ async function voidSale(saleId){
 
         await connection.beginTransaction();
 
-        // Get sale items first
         const [items] = await connection.execute(`
             SELECT product_id, quantity
             FROM sale_items
             WHERE sale_id = ?
         `,[saleId]);
 
-
         for(const item of items){
 
-            // Restore stock
             await connection.execute(`
                 UPDATE products
                 SET current_stock = current_stock + ?
                 WHERE id = ?
             `,[item.quantity,item.product_id]);
 
-
-            // Insert stock movement log
             await connection.execute(`
                 INSERT INTO stock_movements
                 (product_id,type,quantity,note)
@@ -107,14 +105,12 @@ async function voidSale(saleId){
 
         }
 
-
-        // Mark sale as voided
         await connection.execute(`
             UPDATE sales
-            SET status = 'VOIDED'
+            SET status='VOIDED',
+                void_reason = ?
             WHERE id = ?
-        `,[saleId]);
-
+        `,[reason,saleId]);
 
         await connection.commit();
 

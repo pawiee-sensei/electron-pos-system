@@ -200,7 +200,17 @@ window.closeVoidModal = function(){
 
 window.confirmVoid = async function(){
 
-    const result = await window.api.voidSale(pendingVoidSaleId);
+    const reason = document.getElementById("voidReason").value;
+
+if(!reason){
+    showAlert("Please select void reason");
+    return;
+}
+
+const result = await window.api.voidSale({
+    saleId: pendingVoidSaleId,
+    reason: reason
+});
 
     if(result.success){
 

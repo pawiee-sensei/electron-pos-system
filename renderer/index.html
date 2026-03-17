@@ -338,6 +338,22 @@ VOID DETAILS MODAL
 
         <div id="voidItems" class="void-items"></div>
 
+        <div class="void-reason">
+
+                <label>Void Reason</label>
+
+                <select id="voidReason">
+
+                <option value="">Select reason</option>
+                <option value="Customer Cancelled">Customer Cancelled</option>
+                <option value="Incorrect Order">Incorrect Order</option>
+                <option value="Payment Error">Payment Error</option>
+                <option value="Manager Override">Manager Override</option>
+                <option value="Other">Other</option>
+                </select>
+
+        </div>
+
         <div class="modal-actions">
 
             <button class="modal-cancel-btn" onclick="closeVoidModal()">

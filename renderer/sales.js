@@ -204,8 +204,23 @@ async function toggleSaleDetails(row,sale){
     <div class="sale-details-container">
 
         <div class="sale-details-header">
-            Items Purchased
-        </div>
+
+    <span>Items Purchased</span>
+
+    ${
+        sale.status === "VOIDED"
+        ?
+        `<div class="void-badge">
+            VOIDED
+            <span class="void-reason-text">
+                ${sale.void_reason || ""}
+            </span>
+        </div>`
+        :
+        ""
+    }
+
+</div>
 
         <div class="sale-items">
     `;
