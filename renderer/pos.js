@@ -124,6 +124,7 @@ function showView(view){
     // Hide both views first
     document.getElementById("view-pos").classList.add("hidden");
     document.getElementById("view-checkout").classList.add("hidden");
+    
 
     const receiptView = document.getElementById("view-receipt");
     if(receiptView){
@@ -133,6 +134,11 @@ function showView(view){
     const salesView = document.getElementById("view-sales");
     if(salesView){
         salesView.classList.add("hidden");
+    }
+
+     const summary = document.getElementById("salesSummary");
+    if(summary){
+        summary.style.display = (view === "sales") ? "flex" : "none";
     }
 
     // Show selected view
@@ -230,8 +236,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             });
 
+
         });
 
+        
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const summary = document.getElementById("salesSummary");
+    if(summary){
+        summary.style.display = "none";
+    }
 });
 
 

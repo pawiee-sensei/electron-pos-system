@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld("api", {
 
   getSaleItems: (id) => ipcRenderer.invoke("get-sale-items", id),
 
-  voidSale: (id) => ipcRenderer.invoke("void-sale", id)
+  voidSale: (id) => ipcRenderer.invoke("void-sale", id),
+
+  verifyPin: (pin) => ipcRenderer.invoke("verify-pin", pin)
 
 });

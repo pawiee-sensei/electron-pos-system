@@ -3,7 +3,13 @@ const path = require("path");
 const products = require("./modules/products");
 const checkout = require("./modules/checkout");
 const sales = require("./modules/sales");
+const security = require("./modules/security");
 
+ipcMain.handle("verify-pin", async (event,pin) => {
+
+    return await security.verifyPin(pin);
+
+});
 
 ipcMain.handle("get-sales", async (event,date) => {
     return await sales.getSales(date);
