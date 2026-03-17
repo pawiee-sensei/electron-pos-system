@@ -1,0 +1,56 @@
+/* =========================
+MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+}
+
+.modal.hidden{
+    display:none;
+}
+
+.modal-box{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    width:320px;
+    text-align:center;
+}
+
+/* PIN INPUTS */
+
+.pin-inputs{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin:20px 0;
+}
+
+.pin-box{
+    width:50px;
+    height:60px;
+    font-size:28px;
+    text-align:center;
+    border:2px solid #ddd;
+    border-radius:6px;
+}
+
+.pin-box:focus{
+    border-color:#4a6cf7;
+    outline:none;
+}
+
+/* ERROR */
+
+.modal-error{
+    color:#e53935;
+    font-size:13px;
+    height:18px;
+}

@@ -150,7 +150,7 @@ if(label){
         ?
         `<button
         class="void-btn"
-        onclick="voidSale(${sale.id});event.stopPropagation();">
+        onclick="openPinModal(${sale.id});event.stopPropagation();">
         Void
         </button>`
         :

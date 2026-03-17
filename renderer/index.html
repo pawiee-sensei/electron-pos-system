@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="checkout.css">
 <link rel="stylesheet" href="receipt.css">
 <link rel="stylesheet" href="sales.css">
+<link rel="stylesheet" href="ui.css">
 
 </head>
 
@@ -291,6 +292,36 @@
 
 </div> <!-- END app-layout -->
 
+<!-- ===============================
+MANAGER PIN MODAL
+================================ -->
+
+<div id="pinModal" class="modal hidden">
+
+    <div class="modal-box">
+
+        <h2>Manager Authorization</h2>
+
+        <p>Enter Manager PIN</p>
+
+        <div class="pin-inputs">
+
+            <input type="password" maxlength="1" class="pin-box">
+            <input type="password" maxlength="1" class="pin-box">
+            <input type="password" maxlength="1" class="pin-box">
+            <input type="password" maxlength="1" class="pin-box">
+
+        </div>
+
+        <div class="modal-error" id="pinError"></div>
+
+        <div class="modal-actions">
+            <button onclick="closePinModal()">Cancel</button>
+        </div>
+
+    </div>
+
+</div>
 
 <div id="posAlert"></div>
 

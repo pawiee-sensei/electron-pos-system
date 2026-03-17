@@ -58,3 +58,84 @@ window.updateTotal = function(){
 
 }
 
+// ======================================
+// OPEN PIN MODAL
+// ======================================
+
+let pendingVoidSaleId = null;
+
+window.openPinModal = function(saleId){
+
+    pendingVoidSaleId = saleId;
+
+    const modal = document.getElementById("pinModal");
+
+    modal.classList.remove("hidden");
+
+    const inputs = document.querySelectorAll(".pin-box");
+
+    inputs.forEach(i => i.value = "");
+
+    inputs[0].focus();
+
+};
+
+
+
+// ======================================
+// CLOSE PIN MODAL
+// ======================================
+
+window.closePinModal = function(){
+
+    document
+    .getElementById("pinModal")
+    .classList.add("hidden");
+
+};
+
+
+
+// ======================================
+// PIN INPUT HANDLING
+// ======================================
+
+document.addEventListener("input", async function(e){
+
+    if(!e.target.classList.contains("pin-box")) return;
+
+    const boxes = [...document.querySelectorAll(".pin-box")];
+
+    const index = boxes.indexOf(e.target);
+
+    if(e.target.value && index < boxes.length - 1){
+        boxes[index+1].focus();
+    }
+
+    const pin = boxes.map(b => b.value).join("");
+
+    if(pin.length === 4){
+
+        const result = await window.api.verifyPin(pin);
+
+        if(result.success){
+
+            closePinModal();
+
+            // Phase 3 will continue void flow
+            window.startVoidProcess(pendingVoidSaleId);
+
+        }else{
+
+            document.getElementById("pinError").innerText =
+            "Incorrect PIN";
+
+            boxes.forEach(b => b.value="");
+
+            boxes[0].focus();
+
+        }
+
+    }
+
+});
