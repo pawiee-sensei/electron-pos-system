@@ -4,6 +4,7 @@
 
 let expandedRow = null;
 
+
 // =======================================================
 // AUTO FILTER WHEN DATE CHANGES
 // =======================================================
@@ -25,6 +26,8 @@ loadSales(date);
 }
 
 });
+
+
 
 // =======================================================
 // LOAD SALES LIST
@@ -50,6 +53,45 @@ window.loadSales = async function(date = undefined){
     const body = document.getElementById("salesTableBody");
 
     body.innerHTML = "";
+
+
+
+    // =======================================================
+    // SALES SUMMARY CALCULATION
+    // =======================================================
+
+    let revenue = 0;
+    let voided = 0;
+
+    sales.forEach(s => {
+
+        revenue += parseFloat(s.total_amount);
+
+        if(s.status === "VOIDED"){
+            voided++;
+        }
+
+    });
+
+    const transactions = sales.length;
+
+    const average = transactions ? revenue / transactions : 0;
+
+    const revenueEl = document.getElementById("summaryRevenue");
+    const transactionsEl = document.getElementById("summaryTransactions");
+    const voidedEl = document.getElementById("summaryVoided");
+    const averageEl = document.getElementById("summaryAverage");
+
+    if(revenueEl) revenueEl.innerText = "₱" + revenue.toFixed(2);
+    if(transactionsEl) transactionsEl.innerText = transactions;
+    if(voidedEl) voidedEl.innerText = voided;
+    if(averageEl) averageEl.innerText = "₱" + average.toFixed(2);
+
+
+
+    // =======================================================
+    // RENDER SALES TABLE
+    // =======================================================
 
     sales.forEach(sale => {
 
@@ -233,6 +275,8 @@ window.clearSalesFilter = function(){
 
 };
 
+
+
 window.loadTodaySales = function(){
 
 const today = new Date().toISOString().split("T")[0];
@@ -246,6 +290,8 @@ input.value = today;
 loadSales(today);
 
 };
+
+
 
 // =======================================================
 // LOAD ALL SALES
@@ -262,6 +308,3 @@ window.loadAllSales = function(){
     loadSales(null);
 
 };
-
-
-
