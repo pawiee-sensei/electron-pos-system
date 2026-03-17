@@ -54,3 +54,51 @@ MODAL
     font-size:13px;
     height:18px;
 }
+
+/* =========================
+VOID MODAL
+========================= */
+
+.void-items{
+    margin:20px 0;
+    text-align:left;
+}
+
+.void-item{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border-bottom:1px solid #eee;
+}
+
+.danger-btn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:8px 16px;
+    border-radius:6px;
+}
+
+.danger-btn:hover{
+    background:#c62828;
+}
+
+.modal-cancel-btn{
+    background:#f1f1f1;
+    border:none;
+    padding:8px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:500;
+}
+
+.modal-cancel-btn:hover{
+    background:#e4e4e4;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:20px;
+}

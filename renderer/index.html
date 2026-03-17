@@ -323,6 +323,37 @@ MANAGER PIN MODAL
 
 </div>
 
+
+<!-- ===============================
+VOID DETAILS MODAL
+================================ -->
+
+<div id="voidModal" class="modal hidden">
+
+    <div class="modal-box">
+
+        <h2>Void Transaction</h2>
+
+        <div id="voidSaleInfo"></div>
+
+        <div id="voidItems" class="void-items"></div>
+
+        <div class="modal-actions">
+
+            <button class="modal-cancel-btn" onclick="closeVoidModal()">
+            Cancel
+            </button>
+
+            <button class="danger-btn" onclick="confirmVoid()">
+            Confirm Void
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 <div id="posAlert"></div>
 
 

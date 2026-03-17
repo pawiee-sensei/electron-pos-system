@@ -139,3 +139,85 @@ document.addEventListener("input", async function(e){
     }
 
 });
+
+// ======================================
+// OPEN VOID DETAILS MODAL
+// ======================================
+
+window.startVoidProcess = async function(saleId){
+
+    const items = await window.api.getSaleItems(saleId);
+
+    const info = document.getElementById("voidSaleInfo");
+    const list = document.getElementById("voidItems");
+
+    info.innerHTML = `<strong>Sale #${saleId}</strong>`;
+
+    list.innerHTML = "";
+
+    items.forEach(item => {
+
+        const row = document.createElement("div");
+
+        row.className = "void-item";
+
+        row.innerHTML = `
+        <span>${item.name} x${item.quantity}</span>
+        <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+        `;
+
+        list.appendChild(row);
+
+    });
+
+    pendingVoidSaleId = saleId;
+
+    document
+    .getElementById("voidModal")
+    .classList.remove("hidden");
+
+};
+
+
+
+// ======================================
+// CLOSE VOID MODAL
+// ======================================
+
+window.closeVoidModal = function(){
+
+    document
+    .getElementById("voidModal")
+    .classList.add("hidden");
+
+};
+
+
+
+// ======================================
+// CONFIRM VOID
+// ======================================
+
+window.confirmVoid = async function(){
+
+    const result = await window.api.voidSale(pendingVoidSaleId);
+
+    if(result.success){
+
+        showAlert("Transaction Voided");
+
+        closeVoidModal();
+
+        loadSales();
+
+        if(typeof loadProducts === "function"){
+            loadProducts();
+        }
+
+    }else{
+
+        showAlert("Failed to void transaction");
+
+    }
+
+};
