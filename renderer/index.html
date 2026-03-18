@@ -59,6 +59,18 @@ LOGIN SCREEN
         <button onclick="showView('checkout')">Checkout</button>
         <button onclick="showView('sales')">Transactions</button>
 
+            <div class="sidebar-user">
+
+                <div id="currentUserDisplay" class="user-name">
+                    Not Logged In
+                </div>
+
+                <button class="logout-btn" onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
     </div>
 
 
@@ -407,6 +419,29 @@ VOID DETAILS MODAL
 
 <div id="posAlert"></div>
 
+<div id="logoutModal" class="modal hidden">
+
+    <div class="modal-box">
+
+        <h2>Logout</h2>
+
+        <p>Are you sure you want to logout?</p>
+
+        <div class="modal-actions">
+
+            <button onclick="closeLogoutModal()">
+                Cancel
+            </button>
+
+            <button class="danger-btn" onclick="confirmLogout()">
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script src="cart.js"></script>
 <script src="ui.js"></script>

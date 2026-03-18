@@ -20,6 +20,12 @@ window.login = async function(){
         // show POS
         document.getElementById("appLayout").classList.remove("hidden");
 
+        const userDisplay = document.getElementById("currentUserDisplay");
+
+            if(userDisplay){
+                userDisplay.innerText = result.user.username;
+            }
+
         showSuccess("Welcome " + result.user.username);
 
         // focus search immediately
@@ -34,5 +40,53 @@ window.login = async function(){
             "Invalid credentials";
 
     }
+
+};
+
+window.logout = function(){
+
+    const modal = document.getElementById("logoutModal");
+
+    if(modal){
+        modal.classList.remove("hidden");
+    }
+
+};
+
+window.closeLogoutModal = function(){
+    document
+    .getElementById("logoutModal")
+    .classList.add("hidden");
+};
+
+
+window.confirmLogout = function(){
+
+    // close modal first
+    closeLogoutModal();
+
+    // CLOSE ALL MODALS (safety)
+    document.querySelectorAll(".modal").forEach(m=>{
+        m.classList.add("hidden");
+    });
+
+    // RESET APP UI
+    document.getElementById("appLayout").classList.add("hidden");
+    document.getElementById("loginScreen").style.display = "flex";
+
+    // CLEAR INPUTS
+    const user = document.getElementById("loginUsername");
+    const pass = document.getElementById("loginPassword");
+
+    user.value = "";
+    pass.value = "";
+
+    // CLEAR SESSION
+    window.currentUser = null;
+
+    // FOCUS INPUT
+    setTimeout(()=>{
+        user.focus();
+    },100);
 
 };
