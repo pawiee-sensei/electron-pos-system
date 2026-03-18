@@ -133,6 +133,8 @@ if(label){
 
 <td>#${sale.id}</td>
 
+<td>${sale.staff_name || "-"}</td>
+
 <td>₱${sale.total_amount}</td>
 
 <td>

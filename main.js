@@ -42,7 +42,8 @@ ipcMain.handle("process-sale", async (event,data)=>{
     return await checkout.processSale(
         data.cart,
         data.total,
-        data.payment
+        data.payment,
+        data.staffId
     );
 
 });

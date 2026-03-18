@@ -128,10 +128,11 @@ window.processCheckout = async function(){
 
     // Send sale data to backend
     const result = await window.api.processSale({
-        cart: window.cart,
-        total,
-        payment: selectedPayment
-    });
+    cart: window.cart,
+    total,
+    payment: selectedPayment,
+    staffId: window.currentUser.id  
+});
 
     
 

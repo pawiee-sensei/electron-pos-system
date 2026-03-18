@@ -1,6 +1,11 @@
 const db = require("../db");
 
-async function processSale(cart, total, payment){
+async function processSale(cart, total, payment, staffId){
+
+    // fallback to null if undefined
+if(typeof staffId === "undefined"){
+    staffId = null;
+}
 
     const connection = await db.getConnection();
 
@@ -10,9 +15,9 @@ async function processSale(cart, total, payment){
 
         // 1️⃣ Insert sale record
         const [saleResult] = await connection.execute(
-            `INSERT INTO sales (total_amount)
-             VALUES (?)`,
-            [total]
+            `INSERT INTO sales (total_amount, staff_id)
+            VALUES (?, ?)`,
+            [total, staffId]
         );
 
         const saleId = saleResult.insertId;
@@ -77,5 +82,7 @@ async function processSale(cart, total, payment){
     }
 
 }
+
+
 
 module.exports = { processSale };

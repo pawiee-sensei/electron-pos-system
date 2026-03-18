@@ -13,8 +13,10 @@ async function getSales(date = null){
             s.status,
             s.created_at,
             p.payment_method,
+            u.username AS staff_name,
             COALESCE(SUM(si.quantity),0) AS items_count
         FROM sales s
+        LEFT JOIN users u ON u.id = s.staff_id
         LEFT JOIN payments p
         ON p.sale_id = s.id
         LEFT JOIN sale_items si
