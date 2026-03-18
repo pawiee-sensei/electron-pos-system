@@ -137,16 +137,13 @@ window.processCheckout = async function(){
 
  if(result.success){
 
+
+    
     // 🔊 play sound (fixed)
     const audio = new Audio();
-    audio.src = "./sounds/sales.mp3";
+    audio.src = "sounds/sales.mp3";
     audio.volume = 1;
-
-    audio.play().then(()=>{
-        console.log("sound played");
-    }).catch(err=>{
-        console.log("sound failed:", err);
-    });
+    audio.play().catch(()=>{});
 
     // ✅ show success message
     showSuccess("Sale Completed");
@@ -255,10 +252,7 @@ document.addEventListener("keydown", function(e){
 
     }
 
-    // Enter → Complete sale
-    if(e.key === "Enter"){
-        processCheckout();
-    }
+   
 
     // Escape → Return to POS screen
     if(e.key === "Escape"){

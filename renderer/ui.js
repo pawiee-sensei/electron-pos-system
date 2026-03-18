@@ -242,7 +242,7 @@ window.showSuccess = function(message){
     box.style.bottom = "auto";
     box.style.top = "50%";
     box.style.transform = "translate(-50%, -50%)";
-    box.style.background = "green";
+    box.style.background = "#00d420";
 
     box.style.opacity = 1;
 

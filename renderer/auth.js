@@ -20,7 +20,7 @@ window.login = async function(){
         // show POS
         document.getElementById("appLayout").classList.remove("hidden");
 
-        showAlert("Welcome " + result.user.username);
+        showSuccess("Welcome " + result.user.username);
 
         // focus search immediately
         setTimeout(()=>{

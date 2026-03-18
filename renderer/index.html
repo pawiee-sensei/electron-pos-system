@@ -20,17 +20,29 @@ LOGIN SCREEN
 
 <div id="loginScreen" class="login-screen">
 
-    <div class="login-box">
+    <div class="login-container">
 
-        <h2>POS Login</h2>
+        <div class="login-left">
 
-        <input id="loginUsername" placeholder="Username">
+            <h1>POS Electron</h1>
+            <p>Smart Inventory System</p>
 
-        <input id="loginPassword" type="password" placeholder="Password">
+        </div>
 
-        <button onclick="login()">Login</button>
+        <div class="login-right">
 
-        <div id="loginError" class="login-error"></div>
+            <h2>Sign In</h2>
+
+
+            <input id="loginUsername" placeholder="Username">
+
+            <input id="loginPassword" type="password" placeholder="Password">
+
+            <button class="login-btn" onclick="login()">Login</button>
+
+            <div id="loginError" class="login-error"></div>
+
+        </div>
 
     </div>
 
