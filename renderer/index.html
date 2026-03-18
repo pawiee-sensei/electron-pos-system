@@ -14,7 +14,29 @@
 
 <body>
 
-<div class="app-layout">
+    <!-- ===============================
+LOGIN SCREEN
+================================ -->
+
+<div id="loginScreen" class="login-screen">
+
+    <div class="login-box">
+
+        <h2>POS Login</h2>
+
+        <input id="loginUsername" placeholder="Username">
+
+        <input id="loginPassword" type="password" placeholder="Password">
+
+        <button onclick="login()">Login</button>
+
+        <div id="loginError" class="login-error"></div>
+
+    </div>
+
+</div>
+
+<div class="app-layout hidden" id="appLayout">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -380,6 +402,7 @@ VOID DETAILS MODAL
 <script src="checkout.js"></script>
 <script src="receipt.js"></script>
 <script src="sales.js"></script>
+<script src="auth.js"></script>
 
 </body>
 </html>

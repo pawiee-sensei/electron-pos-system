@@ -4,6 +4,19 @@ const products = require("./modules/products");
 const checkout = require("./modules/checkout");
 const sales = require("./modules/sales");
 const security = require("./modules/security");
+const auth = require("./modules/auth");
+
+ipcMain.handle("login", async (event,data)=>{
+
+    const user = await auth.login(data.username,data.password);
+
+    if(user){
+        return { success:true, user };
+    }else{
+        return { success:false };
+    }
+
+});
 
 ipcMain.handle("verify-pin", async (event,pin) => {
 

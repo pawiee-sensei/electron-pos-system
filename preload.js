@@ -12,6 +12,8 @@ contextBridge.exposeInMainWorld("api", {
 
   voidSale: (id) => ipcRenderer.invoke("void-sale", id),
 
-  verifyPin: (pin) => ipcRenderer.invoke("verify-pin", pin)
+  verifyPin: (pin) => ipcRenderer.invoke("verify-pin", pin),
+
+  login: (data) => ipcRenderer.invoke("login", data),
 
 });
