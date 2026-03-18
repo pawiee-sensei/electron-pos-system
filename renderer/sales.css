@@ -298,3 +298,19 @@ border-color:#6a5cff;
     color:#17c920;
     font-weight:600;
 }
+
+tr:has(.status-voided){
+    opacity:0.75;
+}
+
+.expand-icon{
+    width:20px;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+    cursor:pointer;
+}
+
+.sales-table tbody tr:hover .expand-icon{
+    color:#000;
+}

@@ -135,29 +135,38 @@ window.processCheckout = async function(){
 
     
 
-   if(result.success){
+ if(result.success){
 
-    const paymentMethod = selectedPayment;
+    // 🔊 play sound (fixed)
+    const audio = new Audio();
+    audio.src = "./sounds/sales.mp3";
+    audio.volume = 1;
+
+    audio.play().then(()=>{
+        console.log("sound played");
+    }).catch(err=>{
+        console.log("sound failed:", err);
+    });
+
+    // ✅ show success message
+    showSuccess("Sale Completed");
+
+    const total = window.getCartTotal();
 
     const cash = parseFloat(
         document.getElementById("cashInput").value || 0
     );
 
-    const changeText = document
-        .getElementById("changeDisplay")
-        .innerText
-        .replace("Change: ₱","");
+    const change = cash - total;
 
-    const change = parseFloat(changeText) || 0;
+    const items = [...window.cart];
 
-    const receiptItems = [...window.cart];
-
-    // show receipt BEFORE resetting state
+    // 🧾 show receipt
     showReceipt({
         saleId: result.saleId,
-        items: receiptItems,
+        items: items,
         total: total,
-        payment: paymentMethod,
+        payment: selectedPayment,
         cash: cash,
         change: change
     });
@@ -166,33 +175,24 @@ window.processCheckout = async function(){
     window.cart.length = 0;
     renderCart();
 
-    // reset payment UI
+    // reset payment
     selectedPayment = null;
 
     document
     .querySelectorAll(".payment-option")
     .forEach(el => el.classList.remove("active"));
 
-    // reset cash input
-    const cashInput = document.getElementById("cashInput");
-    if(cashInput){
-        cashInput.value = "";
-    }
+    // reset inputs
+    document.getElementById("cashInput").value = "";
+    document.getElementById("changeDisplay").innerText = "Change: ₱0";
 
-    const changeDisplay = document.getElementById("changeDisplay");
-    if(changeDisplay){
-        changeDisplay.innerText = "Change: ₱0";
-    }
-
-    // reload products so stock updates
+    // refresh products
     if(typeof loadProducts === "function"){
         loadProducts();
     }
 
 }else{
-
     showAlert("Transaction failed");
-
 }
 
 }

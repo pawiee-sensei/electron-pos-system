@@ -231,3 +231,32 @@ const result = await window.api.voidSale({
     }
 
 };
+
+window.showSuccess = function(message){
+
+    const box = document.getElementById("posAlert");
+
+    box.innerText = message;
+
+    // center + green
+    box.style.bottom = "auto";
+    box.style.top = "50%";
+    box.style.transform = "translate(-50%, -50%)";
+    box.style.background = "green";
+
+    box.style.opacity = 1;
+
+    setTimeout(()=>{
+        // first hide it
+        box.style.opacity = 0;
+
+        // THEN reset after it's invisible (fix flicker)
+        setTimeout(()=>{
+            box.style.top = "";
+            box.style.bottom = "30px";
+            box.style.transform = "translateX(-50%)";
+            box.style.background = "#e74c3c";
+        },300); // match your CSS transition time
+
+    },1500);
+};

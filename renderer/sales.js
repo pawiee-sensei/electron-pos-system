@@ -89,13 +89,17 @@ if(label){
 
     sales.forEach(s => {
 
+    if(s.status !== "VOIDED"){
     revenue += parseFloat(s.total_amount);
+}
 
     if(s.status === "VOIDED"){
         voided++;
     }
 
+    if(s.status !== "VOIDED"){
     itemsSold += parseInt(s.items_count || 0);
+}
 
 });
 
@@ -125,39 +129,38 @@ if(label){
         const row = document.createElement("tr");
 
         row.innerHTML = `
-        <td>#${sale.id}</td>
+<td class="expand-icon">▶</td>
 
-        <td>₱${sale.total_amount}</td>
+<td>#${sale.id}</td>
 
-        <td>
-        ${sale.payment_method
-            ? sale.payment_method.toUpperCase()
-            : "-"
-        }
-        </td>
+<td>₱${sale.total_amount}</td>
 
-        <td class="status-${sale.status.toLowerCase()}">
-        ${sale.status}
-        </td>
+<td>
+${sale.payment_method ? sale.payment_method.toUpperCase() : "-"}
+</td>
 
-        <td>
-        ${new Date(sale.created_at).toLocaleString()}
-        </td>
+<td class="status-${sale.status.toLowerCase()}">
+${sale.status}
+</td>
 
-        <td>
-        ${
-        sale.status !== "VOIDED"
-        ?
-        `<button
-        class="void-btn"
-        onclick="openPinModal(${sale.id});event.stopPropagation();">
-        Void
-        </button>`
-        :
-        "-"
-        }
-        </td>
-        `;
+<td>
+${new Date(sale.created_at).toLocaleString()}
+</td>
+
+<td>
+${
+sale.status !== "VOIDED"
+?
+`<button
+class="void-btn"
+onclick="handleVoidClick(this, ${sale.id});event.stopPropagation();">
+Void
+</button>`
+:
+"-"
+}
+</td>
+`;
 
         row.onclick = () => toggleSaleDetails(row,sale);
 
@@ -168,27 +171,31 @@ if(label){
 };
 
 
-
 // =======================================================
 // EXPAND / COLLAPSE SALE DETAILS
 // =======================================================
 
-async function toggleSaleDetails(row,sale){
+async function toggleSaleDetails(row, sale){
 
+    const icon = row.querySelector(".expand-icon");
     const next = row.nextElementSibling;
 
-    // collapse if clicking the same row
+    // collapse if clicking same row
     if(next && next.classList.contains("sale-details")){
         next.remove();
+        icon.innerText = "▶";
         expandedRow = null;
         return;
     }
 
-    // collapse previous expanded row
+    // collapse previously expanded row
     if(expandedRow){
         const prev = expandedRow.nextElementSibling;
         if(prev && prev.classList.contains("sale-details")){
             prev.remove();
+
+            const prevIcon = expandedRow.querySelector(".expand-icon");
+            if(prevIcon) prevIcon.innerText = "▶";
         }
     }
 
@@ -198,29 +205,29 @@ async function toggleSaleDetails(row,sale){
     detailsRow.className = "sale-details";
 
     const td = document.createElement("td");
-    td.colSpan = 6;
+    td.colSpan = 7; // because we added expand column
 
     let html = `
     <div class="sale-details-container">
 
         <div class="sale-details-header">
 
-    <span>Items Purchased</span>
+            <span>Items Purchased</span>
 
-    ${
-        sale.status === "VOIDED"
-        ?
-        `<div class="void-badge">
-            VOIDED
-            <span class="void-reason-text">
-                ${sale.void_reason || ""}
-            </span>
-        </div>`
-        :
-        ""
-    }
+            ${
+                sale.status === "VOIDED"
+                ?
+                `<div class="void-badge">
+                    VOIDED
+                    <span class="void-reason-text">
+                        ${sale.void_reason || ""}
+                    </span>
+                </div>`
+                :
+                ""
+            }
 
-</div>
+        </div>
 
         <div class="sale-items">
     `;
@@ -269,8 +276,9 @@ async function toggleSaleDetails(row,sale){
 
     row.after(detailsRow);
 
-    expandedRow = row;
+    icon.innerText = "▼";
 
+    expandedRow = row;
 }
 
 
@@ -352,5 +360,24 @@ window.loadAllSales = function(){
     }
 
     loadSales(null);
+
+};
+
+window.handleVoidClick = function(btn, saleId){
+
+    // prevent double click
+    if(btn.disabled) return;
+
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    // open your existing flow
+    openPinModal(saleId);
+
+    // re-enable after short delay
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.innerText = "Void";
+    }, 1000);
 
 };
