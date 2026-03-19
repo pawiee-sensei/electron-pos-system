@@ -4,6 +4,9 @@
 
 let expandedRow = null;
 
+let currentPage = 1;
+const rowsPerPage = 5;
+
 
 // =======================================================
 // AUTO FILTER WHEN DATE CHANGES
@@ -21,7 +24,9 @@ dateInput.addEventListener("change", () => {
 
 const date = dateInput.value || null;
 
+currentPage = 1;
 loadSales(date);
+
 
 });
 
@@ -31,6 +36,7 @@ const staffFilter = document.getElementById("staffFilter");
 
     if(staffFilter){
         staffFilter.addEventListener("change", () => {
+            currentPage = 1;
             loadSales();
         });
     }
@@ -64,7 +70,50 @@ window.loadSales = async function(date = undefined){
     
     const sales = await window.api.getSales(date, staffId);
 
-    console.log("FRONT SALES:", sales);
+     // =======================================================
+// PAGINATION LOGIC
+// =======================================================
+
+const totalPages = Math.ceil(sales.length / rowsPerPage);
+
+// get buttons
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+// handle visibility + state
+if (prevBtn && nextBtn) {
+
+    // 🔥 hide buttons if only 1 page
+    if (totalPages <= 1) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+    } else {
+        prevBtn.style.display = "inline-block";
+        nextBtn.style.display = "inline-block";
+    }
+
+    // 🔥 disable buttons based on current page
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+}
+
+// 🔥 edge case: no data
+if (totalPages === 0) {
+    currentPage = 1;
+}
+
+// prevent overflow page
+if (currentPage > totalPages) {
+    currentPage = totalPages || 1;
+}
+
+// slice data
+const start = (currentPage - 1) * rowsPerPage;
+const end = start + rowsPerPage;
+
+const paginatedSales = sales.slice(start, end);
+
+console.log("FRONT SALES:", sales);
 
     
     // ===============================
@@ -141,7 +190,13 @@ if(label){
     // RENDER SALES TABLE
     // =======================================================
 
-    sales.forEach(sale => {
+const pageInfo = document.getElementById("pageInfo");
+
+if(pageInfo){
+    pageInfo.innerText = `Page ${currentPage} of ${totalPages || 1}`;
+}
+    
+    paginatedSales.forEach(sale => {
 
         const row = document.createElement("tr");
 
@@ -431,4 +486,16 @@ window.loadStaffList = async function(){
 
     });
 
+};
+
+window.nextPage = function(){
+    currentPage++;
+    loadSales();
+};
+
+window.prevPage = function(){
+    if(currentPage > 1){
+        currentPage--;
+        loadSales();
+    }
 };
