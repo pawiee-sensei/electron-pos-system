@@ -200,23 +200,50 @@ window.closeVoidModal = function(){
 
 window.confirmVoid = async function(){
 
+    const saleId = pendingVoidSaleId; // ✅ FIXED
+
+    const staffId = window.currentUser?.id;
+
+    console.log("VOID FRONT:", {
+        saleId,
+        staffId
+    });
+
+    if(!saleId){
+        showAlert("No sale selected");
+        return;
+    }
+
+    if(!staffId){
+        showAlert("User session missing");
+        return;
+    }
+
     const reason = document.getElementById("voidReason").value;
 
-if(!reason){
-    showAlert("Please select void reason");
-    return;
-}
+    if(!reason){
+        showAlert("Please select void reason");
+        return;
+    }
 
-const result = await window.api.voidSale({
-    saleId: pendingVoidSaleId,
-    reason: reason
-});
+    const result = await window.api.voidSale({
+        saleId: saleId,
+        reason: reason,
+        staffId: staffId
+    });
 
     if(result.success){
 
         showAlert("Transaction Voided");
 
         closeVoidModal();
+
+        // ✅ RESET STATE (THIS FIXES "CAN'T CLICK AGAIN")
+        pendingVoidSaleId = null;
+
+        // ✅ RESET DROPDOWN
+        const select = document.getElementById("voidReason");
+        if(select) select.value = "";
 
         loadSales();
 
@@ -229,7 +256,6 @@ const result = await window.api.voidSale({
         showAlert("Failed to void transaction");
 
     }
-
 };
 
 window.showSuccess = function(message){

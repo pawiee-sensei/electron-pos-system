@@ -49,6 +49,8 @@ window.loadSales = async function(date = undefined){
     }
 
     const sales = await window.api.getSales(date);
+    console.log("FRONT SALES:", sales);
+
 
     // ===============================
 // UPDATE REVENUE LABEL BASED ON FILTER
@@ -207,7 +209,7 @@ async function toggleSaleDetails(row, sale){
     detailsRow.className = "sale-details";
 
     const td = document.createElement("td");
-    td.colSpan = 7; // because we added expand column
+    td.colSpan = 8; // because we added expand column
 
     let html = `
     <div class="sale-details-container">
@@ -291,9 +293,18 @@ async function toggleSaleDetails(row, sale){
 
 window.voidSale = async function(id){
 
+    if(!window.currentUser || !window.currentUser.id){
+        showAlert("User session lost");
+        return;
+    }
+
     if(!confirm("Void this transaction?")) return;
 
-    const result = await window.api.voidSale(id);
+    const result = await window.api.voidSale({
+        saleId: id,
+        reason: document.getElementById("voidReason")?.value || "No reason",
+        staffId: window.currentUser?.id || null
+    });
 
     if(result.success){
 
@@ -301,16 +312,15 @@ window.voidSale = async function(id){
 
         loadSales();
 
-    if(typeof loadProducts === "function"){
-        loadProducts();
-    }
+        if(typeof loadProducts === "function"){
+            loadProducts();
+        }
 
     }else{
 
         showAlert("Failed to void transaction");
 
     }
-
 };
 
 

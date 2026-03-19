@@ -13,24 +13,22 @@ async function getSales(date = null){
             s.status,
             s.created_at,
             p.payment_method,
+
             u.username AS staff_name,
+
             COALESCE(SUM(si.quantity),0) AS items_count
+
         FROM sales s
+
         LEFT JOIN users u ON u.id = s.staff_id
-        LEFT JOIN payments p
-        ON p.sale_id = s.id
-        LEFT JOIN sale_items si
-        ON si.sale_id = s.id
+        LEFT JOIN payments p ON p.sale_id = s.id
+        LEFT JOIN sale_items si ON si.sale_id = s.id
     `;
 
     let params = [];
 
     if(date){
-
-        query += `
-            WHERE DATE(s.created_at) = ?
-        `;
-
+        query += ` WHERE DATE(s.created_at) = ? `;
         params.push(date);
     }
 
@@ -42,8 +40,9 @@ async function getSales(date = null){
 
     const [rows] = await db.execute(query, params);
 
-    return rows;
+    console.log("BACKEND SALES:", rows); // debug
 
+    return rows;
 }
 
 
@@ -77,7 +76,11 @@ async function getSaleItems(saleId){
 async function voidSale(data){
 
     const saleId = data.saleId;
-    const reason = data.reason;
+    let reason = data.reason;
+    let staffId = data.staffId;
+
+    if(typeof reason === "undefined") reason = null;
+    if(typeof staffId === "undefined") staffId = null;
 
     const connection = await db.getConnection();
 
@@ -110,9 +113,10 @@ async function voidSale(data){
         await connection.execute(`
             UPDATE sales
             SET status='VOIDED',
-                void_reason = ?
+                void_reason = ?,
+                void_by = ?
             WHERE id = ?
-        `,[reason,saleId]);
+        `,[reason,staffId,saleId]);
 
         await connection.commit();
 
