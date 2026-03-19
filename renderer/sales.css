@@ -66,11 +66,10 @@
     background:#e63c3f;
 }
 
-.sales-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+.sales-header {
+    display:flex;
+    align-items:center;
+    gap: 10px;
 }
 
 .sales-filters{
@@ -313,4 +312,57 @@ tr:has(.status-voided){
 
 .sales-table tbody tr:hover .expand-icon{
     color:#000;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* DROPDOWN STYLE */
+.staff-filter {
+    width: 20%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    
+}
+
+.filters-bottom {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+    margin-bottom: 20px; /* 👈 ADD THIS */
+}
+
+/* HOVER / FOCUS */
+.staff-filter:hover {
+    border-color: #999;
+}
+
+.staff-filter:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+.filters-top {
+    display: flex;
+    justify-content: flex-end; /* 👈 align right WITHOUT stretching */
+    gap: 10px; /* 👈 control spacing manually */
+}
+
+.sales-filters {
+    margin-left: auto; /* 🔥 pushes filters to the right */
+    display: flex;
+    gap: 10px;
 }
