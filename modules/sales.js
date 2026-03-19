@@ -4,7 +4,9 @@ const db = require("../db");
 // ======================================
 // GET SALES LIST (WITH PAYMENT METHOD)
 // ======================================
-async function getSales(date = null){
+async function getSales(date = null, staffId = null){   
+
+    
 
     let query = `
         SELECT 
@@ -27,10 +29,21 @@ async function getSales(date = null){
 
     let params = [];
 
-    if(date){
-        query += ` WHERE DATE(s.created_at) = ? `;
-        params.push(date);
-    }
+    let conditions = [];
+
+if(date){
+    conditions.push("DATE(s.created_at) = ?");
+    params.push(date);
+}
+
+if(staffId){
+    conditions.push("s.staff_id = ?");
+    params.push(staffId);
+}
+
+if(conditions.length > 0){
+    query += " WHERE " + conditions.join(" AND ");
+}
 
     query += `
         GROUP BY s.id

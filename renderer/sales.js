@@ -11,6 +11,8 @@ let expandedRow = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    loadStaffList();
+
 const dateInput = document.getElementById("salesDateFilter");
 
 if(dateInput){
@@ -25,6 +27,14 @@ loadSales(date);
 
 }
 
+const staffFilter = document.getElementById("staffFilter");
+
+    if(staffFilter){
+        staffFilter.addEventListener("change", () => {
+            loadSales();
+        });
+    }
+
 });
 
 
@@ -34,6 +44,7 @@ loadSales(date);
 // =======================================================
 
 window.loadSales = async function(date = undefined){
+    
 
     // if date is undefined, read from date picker
     if(date === undefined){
@@ -48,10 +59,14 @@ window.loadSales = async function(date = undefined){
 
     }
 
-    const sales = await window.api.getSales(date);
+    const staffId = document.getElementById("staffFilter")?.value || null;
+
+    
+    const sales = await window.api.getSales(date, staffId);
+
     console.log("FRONT SALES:", sales);
 
-
+    
     // ===============================
 // UPDATE REVENUE LABEL BASED ON FILTER
 // ===============================
@@ -338,6 +353,7 @@ window.clearSalesFilter = function(){
     }
 
     loadSales();
+    
 
 };
 
@@ -391,5 +407,28 @@ window.handleVoidClick = function(btn, saleId){
         btn.disabled = false;
         btn.innerText = "Void";
     }, 1000);
+
+};
+
+window.loadStaffList = async function(){
+
+    const staff = await window.api.getStaff();
+
+    const dropdown = document.getElementById("staffFilter");
+
+    if(!dropdown) return;
+
+    dropdown.innerHTML = `<option value="">All Staff</option>`;
+
+    staff.forEach(user => {
+
+        const option = document.createElement("option");
+
+        option.value = user.id;
+        option.innerText = user.username;
+
+        dropdown.appendChild(option);
+
+    });
 
 };

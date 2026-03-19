@@ -14,6 +14,15 @@ async function login(username,password){
     }
 
     return rows[0];
+
 }
 
-module.exports = { login };
+async function getStaff(){
+    const [rows] = await db.execute(`
+        SELECT id, username FROM users
+    `);
+
+    return rows;
+}
+
+module.exports = { login,getStaff };

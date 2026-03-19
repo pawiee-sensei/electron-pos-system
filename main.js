@@ -6,6 +6,10 @@ const sales = require("./modules/sales");
 const security = require("./modules/security");
 const auth = require("./modules/auth");
 
+ipcMain.handle("get-staff", async () => {
+    return await auth.getStaff();
+});
+
 ipcMain.handle("login", async (event,data)=>{
 
     const user = await auth.login(data.username,data.password);
@@ -24,8 +28,8 @@ ipcMain.handle("verify-pin", async (event,pin) => {
 
 });
 
-ipcMain.handle("get-sales", async (event,date) => {
-    return await sales.getSales(date);
+ipcMain.handle("get-sales", async (event, date, staffId) => {
+    return await sales.getSales(date, staffId);
 });
 
 ipcMain.handle("get-sale-items", async (event,id) => {
